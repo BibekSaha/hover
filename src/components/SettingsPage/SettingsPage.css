@@ -1,0 +1,31 @@
+.SettingsPage {
+  margin-top: 2rem;
+  font-size: 1.6rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.SettingsPage__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SettingsPage p {
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--very-muted);
+}
+
+.SettingsPage small {
+  display: block;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--very-muted);
+}
+
+.SettingsPage .small {
+  margin-top: 1.5rem;
+}

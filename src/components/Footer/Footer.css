@@ -1,0 +1,16 @@
+.footer {
+  margin: 5px 0 0 0;
+  display: flex;
+  justify-content: center;
+}
+
+.footer svg {
+  padding: 10px 15px 0px 15px;
+  fill: var(--muted);
+  transition: all 0.3s ease 0s;
+}
+
+.footer svg:hover {
+  transform: scale(1.15);
+  fill: var(--brand-color);
+}

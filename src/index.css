@@ -1,0 +1,32 @@
+@font-face {
+  font-family: "Aktiv Grotesk";
+  src: url("./assets/fonts/AktivGroteskCorp-Bold.woff2");
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./assets/fonts/Montserrat-Regular.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: "Aktiv Grotesk";
+}
+
+:root {
+  --off: #f3f3f3;
+  --muted: #afafaf;
+  --very-muted: #787878;;
+  --brand-color: #fddb27ff;
+  --primary: #010203;
+  --secondary: white;
+  --shadow: rgba(255, 255, 255, 0.2);
+}
+
+.make-it-yellow {
+  color: var(--brand-color);
+}

@@ -1,0 +1,26 @@
+.SongDisplay {
+  font-size: 1.7rem;
+  margin: 15px auto;
+  text-align: center;
+  width: 90%;
+  animation: fadeIn ease-in 1s;
+}
+
+.SongDisplay__text {
+  font-family: "Aktiv Grotesk";
+  white-space: pre-line;
+  display: inline-block;
+  text-align: left;
+  line-height: 1.5em;
+}
+
+@keyframes fadeIn {
+  0% { opacity:0; }
+  100% { opacity:1; }
+}
+
+@media (max-width: 700px) {
+  .SongDisplay {
+    font-size: 1.1rem;
+  }
+}

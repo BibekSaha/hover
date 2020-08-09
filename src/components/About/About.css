@@ -1,0 +1,50 @@
+.About {
+  height: 50vh;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 900px;
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.About a {
+  color: var(--muted);
+}
+
+.About #bibek-saha-image {
+  height: 400px;
+}
+
+.About div {
+  text-align: left;
+  font-size: 1.2rem;
+  color: var(--muted);
+  margin-left: 50px;
+  padding-top: 20px;
+}
+
+@media (max-width: 700px) {
+  .About {
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+  }
+  
+  .About #bibek-saha-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+  }
+
+  .About div {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    text-align: left;
+    margin-top: 20px;
+    font-weight: normal;
+  }
+}

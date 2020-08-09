@@ -1,0 +1,140 @@
+.SongDetailsCard {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  /* bottom: 5%; */
+  /* left: 37.5%; */
+  bottom: 5%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -250px;
+  backdrop-filter: blur(10px);
+  font-size: 1.2rem;
+  font-weight: 300;
+  box-shadow: 2px 0px 15px 2px var(--shadow);
+}
+
+.SongDetailsCard__img {
+  display: block;
+  height: 150px;
+  width: 150px;
+}
+
+.SongDetailsCard__details {
+  margin: 5px 2.5rem;
+  margin-right: 7rem;
+  justify-self: center;
+}
+
+.audio {
+  position: absolute;
+  bottom: 3rem;
+  right: 2rem;
+}
+
+/* Fade in Up animation */
+@keyframes fadeInUp {
+  from {
+      transform: translate3d(0,40px,0);
+  }
+
+  to {
+      transform: translate3d(0,0,0);
+      opacity: 1
+  }
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+      transform: translate3d(0,40px,0);
+  }
+
+  to {
+      transform: translate3d(0,0,0);
+      opacity: 1
+  }
+}
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-fill-mode: both
+}
+
+.animatedFadeInUp {
+  opacity: 0;
+}
+
+.fadeInUp {
+  opacity: 0;
+  animation-name: fadeInUp;
+  -webkit-animation-name: fadeInUp;
+}
+
+
+/* close button construction style */
+.close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+  cursor: pointer;
+}
+.close:hover {
+  opacity: 1;
+}
+.close:before, .close:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 20px;
+  width: 2px;
+  background-color: var(--brand-color);
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 700px) {
+  .SongDetailsCard {
+    max-width: 100% ;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    border: none;
+    font-size: 1rem;
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .SongDetailsCard__img {
+    height: 100px;
+    width: 100px;
+  }
+
+  .SongDetailsCard__details {
+    margin: 5px 5px 5px 15px;
+  }
+
+  .close {
+    right: 5px;
+    top: 15px;
+    opacity: 0.4;
+  }
+
+  .close:before, .close:after {
+    height: 15px;
+  }
+
+  .audio {
+    bottom: 25%;
+    right: 5%;
+  }
+}
