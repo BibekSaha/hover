@@ -1,36 +1,35 @@
 import React from 'react';
+import YouTube from 'react-youtube';
 import './AudioPlayer.css';
 
 class AudioPlayer extends React.Component {
   constructor(props) {
     super(props);
-    this.audioRef = React.createRef();
+    this.videoId = this.props.audioPreviewURL.split('v=')[1];
   }
 
   state = {
     pause: '',
-    autoplay: this.props.autoplay
+    autoplay: Number(!!this.props.autoplay),
   }
 
   componentDidMount() {
-    this.audioRef.current.currentTime = this.props.audioCurrentPlayTime;
     if (sessionStorage.getItem('isNotPlaying') === 'true') return this.setState({ pause: '', autoplay: null });
-    else if (sessionStorage.getItem('isNotPlaying')  === 'false') return this.setState({ pause: 'paused', autoplay: 'play' });
-    else if (this.props.autoplay === 'play') this.setState({ pause: 'paused'});
+    else if (sessionStorage.getItem('isNotPlaying') === 'false') return this.setState({ pause: 'paused', autoplay: 'play' });
   }
 
   songEnd = () => {
     this.setState({ pause: '' });
   };
 
-  handlePlayPauseClick = () => {
+  handlePlayPauseClick = event => {
     if (this.state.pause) {
       this.setState({ pause: '' });
-      this.audioRef.current.pause();
+      event.target.pauseVideo();
     }
     else {
       this.setState({ pause: 'paused' });
-      this.audioRef.current.play();
+      event.target.playVideo();
     }
     sessionStorage.setItem(`isNotPlaying`, `${!!this.state.pause}`);
   };
@@ -40,23 +39,28 @@ class AudioPlayer extends React.Component {
   }
 
   render() {
+    const iFrameParameters = {
+      height: '0',
+      width: '0',
+      playerVars: { autoplay: 1 },
+    }
+
     return (
       <div className={this.props.className}>
+
         <div
           className={`button ${this.state.pause}`}
           onClick={this.handlePlayPauseClick}
         >
-          <audio 
-            ref={this.audioRef}
-            onEnded={this.songEnd}
-            autoPlay={this.state.autoplay}
-            onTimeUpdate={this.handleTimeUpdate}
-            loop={false}
-            crossOrigin=""
-          >
-            <source src={this.props.audioPreviewURL} type="audio/mpeg" />
-          </audio>
         </div>
+        <YouTube 
+          videoId={this.videoId}
+          opts={iFrameParameters}
+          onPlay={this.handlePlayPauseClick}
+          onPause={this.handlePlayPauseClick}
+          onEnd={this.onEnd}
+          onReady={(event) => event.target.playVideo()}
+        />
       </div>
     );
   }

@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch, Route
 } from 'react-router-dom';
-import { Store, set, get } from 'idb-keyval';
+import { Store, get } from 'idb-keyval';
 import Header from '../Header/Header';
 import SongInput from '../SongInput/SongInput';
 import SongDisplay from '../SongDisplay/SongDisplay';
@@ -16,9 +16,7 @@ import './App.css';
 import parseCookies from '../../utils/parseCookies';
 import applyTheme from '../../utils/changeThemeColor';
 import cookieCreator from '../../utils/createCookie';
-
-const DETAILS_URL = `https://api.lyrics.ovh/suggest/`;
-const LYRICS_URL = `https://api.lyrics.ovh/v1`;
+import addToCache from '../../utils/searchAndFetch';
 
 class App extends React.Component {
   state = {
@@ -60,37 +58,6 @@ class App extends React.Component {
     applyTheme(theme);
   }
 
-  addToCache = (song, songStore) => {
-    const URL = DETAILS_URL + song;
-
-    const cache = {
-      fullTitle: '',
-      artistName: '',
-      imageURL: '',
-      audioPreviewURL: '',
-      lyrics: ''
-    };
-
-    return fetch(URL)
-      .then(resp => resp.json())
-      .then(resp => resp.data[0])
-      .then(songDataResp => {
-        cache.fullTitle = songDataResp.title;
-        cache.artistName = songDataResp.artist.name;
-        cache.imageURL = songDataResp.album.cover_medium;
-        cache.audioPreviewURL = songDataResp.preview;
-        return fetch(`${LYRICS_URL}/${cache.artistName}/${cache.fullTitle}`);
-      })
-      .then(resp => resp.json())
-      .then(resp => {
-        if (resp.error || !resp.lyrics) return Promise.reject();
-        cache.lyrics = resp.lyrics;
-        return set(song, cache, songStore)
-          .then(_ => cache);
-      })
-      .catch(err => Promise.reject());
-  };
-
   handleFormSubmit = e => {
     e.preventDefault();
     const song = this.state.song.toLowerCase().trim();
@@ -120,7 +87,7 @@ class App extends React.Component {
       .then(resp => {
         if (resp) return resp;
         else {
-          return this.addToCache(song, songStore);
+          return addToCache(song, songStore);
         }
       })
       .then(songData => {
@@ -136,7 +103,7 @@ class App extends React.Component {
           showSongDetailsCard: true
         })
       })
-      .catch(_ => this.setState({
+      .catch(() => this.setState({
         showSongDetailsCard: false,
         notFound: true,
         loading: false,

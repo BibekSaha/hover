@@ -2,8 +2,6 @@
   position: fixed;
   display: flex;
   align-items: center;
-  /* bottom: 5%; */
-  /* left: 37.5%; */
   bottom: 5%;
   left: 50%;
   margin-top: -100px;

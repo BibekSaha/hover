@@ -1,9 +1,9 @@
 import React from 'react';
 import './Loader.css';
 
-const Loader = () => {
+const Loader = props => {
   return (
-    <div className="Loader">
+    <div className={props.className}>
       <div className="lds-ring">
         <div></div>
         <div></div>
@@ -13,5 +13,9 @@ const Loader = () => {
     </div>
   );
 };
+
+Loader.defaultProps = {
+  className: 'Loader'
+}
 
 export default Loader;

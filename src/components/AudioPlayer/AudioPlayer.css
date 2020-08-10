@@ -1,3 +1,9 @@
+.song__card__loader {
+  position: absolute;
+  bottom: 3rem;
+  right: 2rem;
+}
+
 .button,
 .paused {
   box-sizing: border-box;
