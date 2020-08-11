@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player/youtube';
-import '../Loader/Loader';
+import Loader from '../Loader/Loader';
 import './AudioPlayer.css';
 
 class AudioPlayer extends React.Component {
@@ -12,13 +12,15 @@ class AudioPlayer extends React.Component {
   state = {
     pause: '',
     autoplay: Number(!!this.props.autoplay),
+    shouldPlay: !!this.props.autoplay,
+    showLoader: !!this.props.autoplay
   }
 
   componentDidMount() {
     this.audioRef.current.seekTo(this.props.audioCurrentPlayTime, 'seconds');
-    if (sessionStorage.getItem('isNotPlaying') === 'true') return this.setState({ pause: '', autoplay: null });
-    else if (sessionStorage.getItem('isNotPlaying') === 'false') return this.setState({ pause: 'paused', autoplay: 'play' });
-    else if (this.state.autoplay) this.setState({ pause: 'paused' });
+    if (sessionStorage.getItem('isNotPlaying') === 'true') return this.setState({ pause: '', showLoader: false, shouldPlay: false });
+    else if (sessionStorage.getItem('isNotPlaying') === 'false') return this.setState({ pause: 'paused', showLoader: false, shouldPlay: true });
+    else if (this.props.autoplay) this.setState({ pause: 'paused', shouldPlay: true });
   }
 
   componentWillUnmount() {
@@ -26,46 +28,50 @@ class AudioPlayer extends React.Component {
   }
 
   songEnd = () => {
-    this.setState({ pause: '' });
+    this.setState({ pause: '', shouldPlay: false });
   };
 
   handlePlayPauseClick = () => {
     if (this.state.pause) {
       // song was playing
-      this.setState({ pause: '' });
+      this.setState({ pause: '', shouldPlay: false });
+    } else {
+      this.setState({ pause: 'paused', shouldPlay: true }); 
     }
-    else {
-      this.setState({ pause: 'paused' });
-    }
-    sessionStorage.setItem(`isNotPlaying`, `${!!this.state.pause}`);
+    sessionStorage.setItem(`isNotPlaying`, `${this.state.shouldPlay}`);
   };
-
-  handleTimeUpdate = (duration) => {
-    console.log(duration);
-    this.props.changeAudioCurrentPlayTime(duration);
-  }
 
   handleOnStart = () => {
     this.currentAudioTime = setInterval(() => this.props.changeAudioCurrentPlayTime(this.audioRef.current.getCurrentTime()), 1000);
   }
 
   render() {
+    if (!ReactPlayer.canPlay(this.props.audioPreviewURL)) return null;
+    let size = 50;
+    if (window.screen.width <= 700) size = 35;
     return (
       <div className={this.props.className}>
-        <div
-          className={`button ${this.state.pause}`}
-          onClick={this.handlePlayPauseClick}
-        >
+        {
+          (this.state.showLoader) ?
+            <Loader className="song__card__loader" size={size} /> :
+            <div
+              className={`button ${this.state.pause}`}
+              onClick={this.handlePlayPauseClick}
+            >
+            </div>
+        }
         <ReactPlayer
           ref={this.audioRef}
           url={this.props.audioPreviewURL}
-          playing={!!this.state.pause}
+          playing={this.state.shouldPlay}
           onStart={this.handleOnStart}
           onEnded={this.songEnd}
+          onReady={() => this.setState({ showLoader: false })}
+          onBuffer={() => this.setState({ showLoader: true })}
+          onBufferEnd={() => this.setState({ showLoader: false })}
           width={0}
           height={0}
         />
-        </div>
       </div>
     );
   }

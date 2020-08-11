@@ -1,7 +1,7 @@
 .song__card__loader {
   position: absolute;
-  bottom: 3rem;
-  right: 2rem;
+  bottom: -0.3rem;
+  right: -0.6rem;
 }
 
 .button,

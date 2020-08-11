@@ -133,7 +133,10 @@ class App extends React.Component {
                 onInputChange={this.onInputChange}
               />
               {this.state.loading ?
-                <Loader /> :
+                <Loader 
+                  color="var(--secondary)"
+                  size="70"
+                /> :
                 <React.Fragment>
                   <SongDisplay
                     songLyrics={this.state.lyrics}
