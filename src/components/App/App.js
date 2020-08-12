@@ -12,11 +12,9 @@ import SongDetailsCard from '../SongDetailsCard/SongDetailsCard';
 import About from '../About/About';
 import Error404Page from '../Error404Page/Error404Page';
 import SettingsPage from '../SettingsPage/SettingsPage';
-import Tracks from '../Tracks/Tracks';
 import './App.css';
 import parseCookies from '../../utils/parseCookies';
 import applyTheme from '../../utils/changeThemeColor';
-import cookieCreator from '../../utils/createCookie';
 import addToCache from '../../utils/searchAndFetch';
 
 class App extends React.Component {
@@ -30,32 +28,11 @@ class App extends React.Component {
     artistName: '',
     imageURL: '',
     showSongDetailsCard: false,
-    theme: '',
     audioPreviewURL: '',
-    autoplay: '',
-    audioCurrentPlayTime: 0
   }
 
   componentDidMount() {
-    const theme = 'darkTheme' && parseCookies().theme;
-    applyTheme(theme);
-
-    const autoplay = parseCookies().autoplay === 'play' ? 'play' : null;
-
-    this.setState({ theme, autoplay });
-  }
-
-  changeAudioCurrentPlayTime = (time) => {
-    this.setState({ audioCurrentPlayTime: time });
-  };
-
-  onChangeAutoPlay = autoplay => {
-    this.setState({ autoplay });
-    cookieCreator('autoplay', autoplay);
-  }
-
-  onChangeTheme = theme => {
-    this.setState({ theme })
+    const theme = parseCookies().theme || 'darkTheme';
     applyTheme(theme);
   }
 
@@ -79,11 +56,10 @@ class App extends React.Component {
       imageURL: '',
       showSongDetailsCard: false,
       audioPreviewURL: '',
-      audioCurrentPlayTime: 0
     });
 
     const songStore = new Store('songs', 'song-store');
-    const songOrderStore = new Store('song', 'song-order-keys');
+    // const songOrderStore = new Store('song', 'song-order-keys');
 
     get(song, songStore)
       .then(resp => {
@@ -113,7 +89,7 @@ class App extends React.Component {
   };
 
   removeShowSongDetailsCard = () => {
-    this.setState({ showSongDetailsCard: false })
+    this.setState({ showSongDetailsCard: false });
   }
 
   onInputChange = e => {
@@ -127,21 +103,17 @@ class App extends React.Component {
       <Router>
         <div>
           <Header />
-          {/* <SongInput
-            handleFormSubmit={this.handleFormSubmit}
-            song={this.state.song}
-            onInputChange={this.onInputChange}
-          />
-          <Tracks /> */}
           <Switch>
-            <Route exact path="/">
+            <Route exact path={['/', '/search/:song']}>
               <SongInput
                 handleFormSubmit={this.handleFormSubmit}
                 song={this.state.song}
                 onInputChange={this.onInputChange}
               />
+            </Route>
+            <Route exact path="/search/:song">
               {this.state.loading ?
-                <Loader 
+                <Loader
                   color="var(--secondary)"
                   size="70"
                 /> :
@@ -157,10 +129,6 @@ class App extends React.Component {
                     artist={this.state.artistName}
                     thumbnail={this.state.imageURL}
                     audioPreviewURL={this.state.audioPreviewURL}
-
-                    autoplay={this.state.autoplay}
-                    audioCurrentPlayTime={this.state.audioCurrentPlayTime}
-                    changeAudioCurrentPlayTime={this.changeAudioCurrentPlayTime}
                   />
                 </React.Fragment>
               }
@@ -169,13 +137,7 @@ class App extends React.Component {
               <About />
             </Route>
             <Route path="/settings">
-              <SettingsPage
-                theme={this.state.theme}
-                onChangeTheme={this.onChangeTheme}
-
-                autoplay={this.state.autoplay}
-                onChangeAutoPlay={this.onChangeAutoPlay}
-              />
+              <SettingsPage />
             </Route>
             <Route path="/*">
               <Error404Page />

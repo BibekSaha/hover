@@ -23,7 +23,6 @@ const LightTheme = {
 const metaThemeColor = document.querySelector("meta[name=theme-color]");
 
 function applyTheme(theme) {
-  theme = theme || 'darktheme';
   const themeStyleObject = theme === 'lightTheme' ? LightTheme : DarkTheme;
   Object.keys(themeStyleObject).map(key => (
     document.documentElement.style.setProperty(key, themeStyleObject[key])

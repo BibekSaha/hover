@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player/youtube';
 import Loader from '../Loader/Loader';
+import cookieParser from '../../utils/parseCookies';
 import './AudioPlayer.css';
 
 class AudioPlayer extends React.Component {
@@ -11,35 +12,33 @@ class AudioPlayer extends React.Component {
 
   state = {
     pause: '',
-    autoplay: Number(!!this.props.autoplay),
-    // shouldPlay: !!this.props.autoplay,
-    // showLoader: !!this.props.autoplay
     showLoader: true
   }
 
   componentDidMount() {
-    this.audioRef.current.seekTo(this.props.audioCurrentPlayTime, 'seconds');
-    // if (sessionStorage.getItem('isNotPlaying') === 'true') return this.setState({ pause: '', showLoader: false, shouldPlay: false });
+    const audioCurrentPlayTime = (sessionStorage.getItem('audioCurrentPlayTime') ? 
+      parseInt(sessionStorage.getItem('audioCurrentPlayTime')) : 0);
+    this.audioRef.current.seekTo(audioCurrentPlayTime, 'seconds');
+
+    // if the user navigates to a different route while they have searched for a song then save the state of the player
+    // else start with the autoplay settings
     if (sessionStorage.getItem('isNotPlaying') === 'true') return this.setState({ pause: '' });
     else if (sessionStorage.getItem('isNotPlaying') === 'false') return this.setState({ pause: 'paused' });
-    // else if (sessionStorage.getItem('isNotPlaying') === 'false') return this.setState({ pause: 'paused', showLoader: false, shouldPlay: true });
-    else if (this.state.autoplay) this.setState({ pause: 'paused' });
-    // else if (this.props.autoplay) this.setState({ pause: 'paused', shouldPlay: true });
+    else if (cookieParser().autoplay) this.setState({ pause: 'paused' });
   }
 
   componentWillUnmount() {
     clearInterval(this.currentAudioTime);
+    sessionStorage.setItem('audioCurrentPlayTime', this.props.audioCurrentPlayTime);
   }
 
   songEnd = () => {
     this.setState({ pause: '' });
-    // this.setState({ pause: '', shouldPlay: false });
   };
 
   handlePlayPauseClick = () => {
     if (this.state.pause) {
       // song was playing
-      // this.setState({ pause: '', shouldPlay: false });
       this.setState({ pause: '' });
     } else {
       this.setState({ pause: 'paused' }); 
@@ -48,8 +47,11 @@ class AudioPlayer extends React.Component {
   };
 
   handleOnStart = () => {
-    this.currentAudioTime = setInterval(() => this.props.changeAudioCurrentPlayTime(this.audioRef.current.getCurrentTime()), 1000);
-  }
+    this.currentAudioTime = setInterval(() => {
+      let audioCurrentPlayTime = this.audioRef.current.getCurrentTime();
+      this.props.setAudioCurrentPlayTime(audioCurrentPlayTime);
+    }, 1000);
+  };
 
   render() {
     if (!ReactPlayer.canPlay(this.props.audioPreviewURL)) return null;
@@ -69,12 +71,10 @@ class AudioPlayer extends React.Component {
         <ReactPlayer
           ref={this.audioRef}
           url={this.props.audioPreviewURL}
-          // playing={this.state.shouldPlay}
           playing={!!this.state.pause}
           onStart={this.handleOnStart}
           onEnded={this.songEnd}
           onError={() => this.setState({ showLoader: true })}
-          // onError={() => this.setState({ showLoader: true, shouldPlay: false })}
           onReady={() => this.setState({ showLoader: false })}
           onBuffer={() => this.setState({ showLoader: true })}
           onBufferEnd={() => this.setState({ showLoader: false })}

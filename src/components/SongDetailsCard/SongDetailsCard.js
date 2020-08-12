@@ -4,12 +4,24 @@ import './SongDetailsCard.css';
 
 class SongDetailsCard extends React.Component {
   state = {
-    duration: '00:00'
+    duration: '00:00',
+    audioCurrentPlayTime: 0
   }
 
-  setDuration = (seconds) => {
+  componentDidMount() {
+    const audioCurrentPlayTime = (sessionStorage.getItem('audioCurrentPlayTime') ? 
+      parseInt(sessionStorage.getItem('audioCurrentPlayTime')) : 0
+    );
+    this.setState({ audioCurrentPlayTime });
+  }
+
+  setDuration = seconds => {
     this.setState({ duration: this.parseSeconds(seconds) })
-  } 
+  }
+
+  setAudioCurrentPlayTime = time => {
+    this.setState({ audioCurrentPlayTime: time });
+  }
 
   parseSeconds(seconds) {
     seconds = Math.round(seconds);
@@ -34,15 +46,14 @@ class SongDetailsCard extends React.Component {
             <p>Title: <span className="make-it-yellow">{this.props.title}</span></p><br />
             <p>Artist: <span className="make-it-yellow">{this.props.artist}</span></p>
             <p className="SongDetailsCard__duration">
-              {`${this.parseSeconds(this.props.audioCurrentPlayTime)}`} / {`${this.state.duration}`}
+              {`${this.parseSeconds(this.state.audioCurrentPlayTime)}`} / {`${this.state.duration}`}
             </p>
           </div>
           <div onClick={this.props.removeShowSongDetailsCard} className="close"></div>
           <AudioPlayer
             audioPreviewURL={this.props.audioPreviewURL}
-            autoplay={this.props.autoplay}
-            audioCurrentPlayTime={this.props.audioCurrentPlayTime}
-            changeAudioCurrentPlayTime={this.props.changeAudioCurrentPlayTime}
+            audioCurrentPlayTime={this.state.audioCurrentPlayTime}
+            setAudioCurrentPlayTime={this.setAudioCurrentPlayTime}
             setDuration={this.setDuration}
             className="audio"
           />
@@ -51,28 +62,5 @@ class SongDetailsCard extends React.Component {
     );
   }
 };
-
-// const SongDetailsCard = props => {
-//   if (!props.showSongDetailsCard) return null;
-//   return (
-//     <React.Fragment>
-//       <div className="SongDetailsCard animated animatedFadeInUp fadeInUp">
-//         <img className="SongDetailsCard__img" src={props.thumbnail} alt={props.title} />
-//         <div className="SongDetailsCard__details">
-//           <p>Title: <span className="make-it-yellow">{props.title}</span></p><br />
-//           <p>Artist: <span className="make-it-yellow">{props.artist}</span></p>
-//         </div>
-//         <div onClick={props.removeShowSongDetailsCard} className="close"></div>
-//         <AudioPlayer 
-//           audioPreviewURL={props.audioPreviewURL}
-//           autoplay={props.autoplay}
-//           audioCurrentPlayTime={props.audioCurrentPlayTime}
-//           changeAudioCurrentPlayTime={props.changeAudioCurrentPlayTime}
-//           className="audio"
-//         />
-//       </div>
-//     </React.Fragment>
-//   );
-// };
 
 export default SongDetailsCard;

@@ -9,23 +9,16 @@ class SettingsPage extends React.Component {
       <div className="SettingsPage">
         <p>Theme Settings</p>
         <div className="SettingsPage__item">Light Mode
-          <ToggleTheme
-            theme={this.props.theme}
-            onChangeTheme={this.props.onChangeTheme}
-          />
+          <ToggleTheme /> 
         </div>
         <p>Audio Settings</p>
         <div className="SettingsPage__item">Auto Play
-          <AudioAutoPlay
-            autoplay={this.props.autoplay}
-            onChangeAutoPlay={this.props.onChangeAutoPlay}
-          />
+          <AudioAutoPlay />
         </div>
         <div className="small">
           <small>The songs are of preview only</small>
           <small>and are of 30 seconds long</small>
         </div>
-        {/* <p>This page is currently under development</p> */}
       </div>
     );
   }
