@@ -31,12 +31,6 @@ const addToCache = (song, songStore) => {
       const songAPIpath = songDataResp.api_path;
       GENIUS_SONG_DETAILS_URI = GENIUS_BASE_URI + `${songAPIpath}?access_token=${process.env.REACT_APP_GENIUS_TOKEN}&text_format=plain`;
 
-      return fetch(`${LYRICS_BASE_URL}/${cache.artistName}/${cache.fullTitle}`);
-    })
-    .then(resp => resp.json())
-    .then(resp => {
-      if (resp.error || !resp.lyrics) return Promise.reject();
-      cache.lyrics = resp.lyrics;
       return fetch(GENIUS_SONG_DETAILS_URI, GENIUS_AUTH_HEADERS);
     })
     .then(resp => resp.json())
@@ -44,8 +38,21 @@ const addToCache = (song, songStore) => {
     .then(songMediaData => {
       const youTubeObject = songMediaData.find(mediaObj => mediaObj.provider === 'youtube');
       cache.audioPreviewURL = youTubeObject.url;
-      return set(song, cache, songStore)
-        .then(_ => cache);
+
+      // sanitizing the title and the 
+      const artist = cache.artistName.split('&')[0].trim();
+      const title = decodeURI(cache.fullTitle.trim());
+      return fetch(`${LYRICS_BASE_URL}/${artist}/${title}`);
+    })
+    .then(resp => resp.json())
+    .then(resp => {
+      if (resp.error || !resp.lyrics) {
+        if (!cache.audioPreviewURL) return Promise.reject();
+        cache.lyrics = '';
+      } else {
+        cache.lyrics = resp.lyrics;
+      }
+      return set(song, cache, songStore).then(() => cache);
     })
     .catch(err => Promise.reject());
 };

@@ -20,7 +20,7 @@ const LightTheme = {
   '--shadow': 'rgba(0, 0, 0, 0.2)'
 };
 
-// const metaThemeColor = document.querySelector("meta[name=theme-color]");
+const metaThemeColor = document.querySelector("meta[name=theme-color]");
 
 function applyTheme(theme) {
   theme = theme || 'darktheme';
@@ -28,7 +28,7 @@ function applyTheme(theme) {
   Object.keys(themeStyleObject).map(key => (
     document.documentElement.style.setProperty(key, themeStyleObject[key])
   ));
-  // metaThemeColor.setAttribute("content", themeStyleObject['--primary']);
+  metaThemeColor.setAttribute("content", themeStyleObject['--primary']);
   cookieCreator('theme', theme);
 }
 

@@ -12,6 +12,7 @@ import SongDetailsCard from '../SongDetailsCard/SongDetailsCard';
 import About from '../About/About';
 import Error404Page from '../Error404Page/Error404Page';
 import SettingsPage from '../SettingsPage/SettingsPage';
+import Tracks from '../Tracks/Tracks';
 import './App.css';
 import parseCookies from '../../utils/parseCookies';
 import applyTheme from '../../utils/changeThemeColor';
@@ -22,7 +23,7 @@ class App extends React.Component {
   state = {
     song: '',
     prevSong: '',
-    lyrics: '',
+    lyrics: '\0',
     notFound: false,
     loading: false,
     fullTitle: '',
@@ -82,6 +83,7 @@ class App extends React.Component {
     });
 
     const songStore = new Store('songs', 'song-store');
+    const songOrderStore = new Store('song', 'song-order-keys');
 
     get(song, songStore)
       .then(resp => {
@@ -125,6 +127,12 @@ class App extends React.Component {
       <Router>
         <div>
           <Header />
+          {/* <SongInput
+            handleFormSubmit={this.handleFormSubmit}
+            song={this.state.song}
+            onInputChange={this.onInputChange}
+          />
+          <Tracks /> */}
           <Switch>
             <Route exact path="/">
               <SongInput
