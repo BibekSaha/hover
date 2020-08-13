@@ -6,9 +6,7 @@ import {
 import { Store, get } from 'idb-keyval';
 import Header from '../Header/Header';
 import SongInput from '../SongInput/SongInput';
-import SongDisplay from '../SongDisplay/SongDisplay';
-import Loader from '../Loader/Loader';
-import SongDetailsCard from '../SongDetailsCard/SongDetailsCard';
+import Song from '../Song/Song';
 import About from '../About/About';
 import Error404Page from '../Error404Page/Error404Page';
 import SettingsPage from '../SettingsPage/SettingsPage';
@@ -19,8 +17,6 @@ import addToCache from '../../utils/searchAndFetch';
 
 class App extends React.Component {
   state = {
-    song: '',
-    prevSong: '',
     lyrics: '\0',
     notFound: false,
     loading: false,
@@ -36,30 +32,28 @@ class App extends React.Component {
     applyTheme(theme);
   }
 
-  handleFormSubmit = e => {
-    e.preventDefault();
-    const song = this.state.song.toLowerCase().trim();
-    if (!song) return;
-
-    sessionStorage.clear();
-
-    if (song === this.state.prevSong) {
-      if (!this.state.notFound)
-        this.setState({ showSongDetailsCard: true, audioCurrentPlayTime: 0 });
-      return;
-    }
-
+  resetState = () => {
     this.setState({
       loading: true,
       fullTitle: '',
       artistName: '',
       imageURL: '',
+      lyrics: '\0',
       showSongDetailsCard: false,
-      audioPreviewURL: '',
+      audioPreviewURL: ''
     });
+  }
+
+  getSong = (song) => {
+    if (!song) return;
+
+    if (song === this.state.prevSong) {
+      if (!this.state.notFound)
+        this.setState({ showSongDetailsCard: true });
+      return;
+    }
 
     const songStore = new Store('songs', 'song-store');
-    // const songOrderStore = new Store('song', 'song-order-keys');
 
     get(song, songStore)
       .then(resp => {
@@ -78,7 +72,7 @@ class App extends React.Component {
           prevSong: song,
           notFound: false,
           loading: false,
-          showSongDetailsCard: true
+          showSongDetailsCard: true,
         })
       })
       .catch(() => this.setState({
@@ -86,17 +80,11 @@ class App extends React.Component {
         notFound: true,
         loading: false,
       }));
-  };
+  }
 
   removeShowSongDetailsCard = () => {
     this.setState({ showSongDetailsCard: false });
   }
-
-  onInputChange = e => {
-    this.setState({
-      song: e.target.value
-    });
-  };
 
   render() {
     return (
@@ -105,41 +93,24 @@ class App extends React.Component {
           <Header />
           <Switch>
             <Route exact path={['/', '/search/:song']}>
-              <SongInput
-                handleFormSubmit={this.handleFormSubmit}
-                song={this.state.song}
-                onInputChange={this.onInputChange}
+              <SongInput resetData={this.resetState} />
+              <Route exact path="/search/:song"
+                children={
+                  <Song 
+                    data={this.state} 
+                    getSong={this.getSong}
+                    removeShowSongDetailsCard={this.removeShowSongDetailsCard}
+                  />
+                }
               />
             </Route>
-            <Route exact path="/search/:song">
-              {this.state.loading ?
-                <Loader
-                  color="var(--secondary)"
-                  size="70"
-                /> :
-                <React.Fragment>
-                  <SongDisplay
-                    songLyrics={this.state.lyrics}
-                    notFound={this.state.notFound}
-                  />
-                  <SongDetailsCard
-                    showSongDetailsCard={this.state.showSongDetailsCard}
-                    removeShowSongDetailsCard={this.removeShowSongDetailsCard}
-                    title={this.state.fullTitle}
-                    artist={this.state.artistName}
-                    thumbnail={this.state.imageURL}
-                    audioPreviewURL={this.state.audioPreviewURL}
-                  />
-                </React.Fragment>
-              }
-            </Route>
-            <Route path="/about">
+            <Route exact path="/about">
               <About />
             </Route>
-            <Route path="/settings">
+            <Route exact path="/settings">
               <SettingsPage />
             </Route>
-            <Route path="/*">
+            <Route>
               <Error404Page />
             </Route>
           </Switch>
