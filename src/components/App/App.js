@@ -45,14 +45,6 @@ class App extends React.Component {
   }
 
   getSong = (song) => {
-    if (!song) return;
-
-    if (song === this.state.prevSong) {
-      if (!this.state.notFound)
-        this.setState({ showSongDetailsCard: true });
-      return;
-    }
-
     const songStore = new Store('songs', 'song-store');
 
     get(song, songStore)
@@ -83,7 +75,11 @@ class App extends React.Component {
   }
 
   removeShowSongDetailsCard = () => {
-    this.setState({ showSongDetailsCard: false });
+    this.setState({ showSongDetailsCard: false })
+  }
+
+  bringShowSongDetailsCard = () => {
+    this.setState({ showSongDetailsCard: true })
   }
 
   render() {
@@ -93,13 +89,15 @@ class App extends React.Component {
           <Header />
           <Switch>
             <Route exact path={['/', '/search/:song']}>
-              <SongInput resetData={this.resetState} />
+              <SongInput />
               <Route exact path="/search/:song"
                 children={
-                  <Song 
+                  <Song
+                    resetData={this.resetState}
                     data={this.state} 
                     getSong={this.getSong}
                     removeShowSongDetailsCard={this.removeShowSongDetailsCard}
+                    bringShowSongDetailsCard={this.bringShowSongDetailsCard}
                   />
                 }
               />

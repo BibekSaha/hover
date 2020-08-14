@@ -19,6 +19,14 @@
   color: var(--very-muted);
 }
 
+.SettingPage__loop { 
+  margin-top: 32px;
+}
+
+.SettingPage__loop__text {
+  margin-right: 50px;
+}
+
 .SettingsPage small {
   display: block;
   font-size: 0.8rem;

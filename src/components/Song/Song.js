@@ -7,9 +7,9 @@ import SongDetailsCard from '../SongDetailsCard/SongDetailsCard';
 
 class Song extends React.Component {
   updateSongComponent() {
+    this.props.resetData();
     sessionStorage.clear();
-    console.log(this.props);
-    const song = this.props.match.params.song.split('-').join(' ').toLowerCase().trim();
+    const song = this.props.match.params.song.split('-').join(' ');
     this.props.getSong(song);
   }
 
@@ -17,9 +17,11 @@ class Song extends React.Component {
     this.updateSongComponent()
   }
 
-  componentDidUpdate(prevProps) {
-    console.log(this.props);
+  componentDidUpdate(prevProps) { 
     if (prevProps.match.params.song !== this.props.match.params.song) this.updateSongComponent();
+    else if (prevProps.match.params.song === this.props.match.params.song) {
+      this.props.data.showSongDetailsCard = true;
+    }
   }
 
   render() {
@@ -35,6 +37,8 @@ class Song extends React.Component {
         <SongDisplay
           songLyrics={this.props.data.lyrics}
           notFound={this.props.data.notFound}
+          showSongDetailsCard={this.props.data.showSongDetailsCard}
+          bringShowSongDetailsCard={this.props.bringShowSongDetailsCard}
         />
         <SongDetailsCard
           showSongDetailsCard={this.props.data.showSongDetailsCard}

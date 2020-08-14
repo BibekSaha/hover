@@ -1,7 +1,5 @@
-.SongDetailsCard {
+.SongDetailsCarsWrapper {
   position: fixed;
-  display: flex;
-  align-items: center;
   bottom: 5%;
   left: 50%;
   margin-top: -100px;
@@ -9,7 +7,13 @@
   backdrop-filter: blur(10px);
   font-size: 1.2rem;
   font-weight: 300;
+  width: 500px;
   box-shadow: 2px 0px 15px 2px var(--shadow);
+}
+
+.SongDetailsCard {
+  display: flex;
+  align-items: center;
 }
 
 .SongDetailsCard__img {
@@ -25,21 +29,13 @@
   line-height: 1rem;
 }
 
-.SongDetailsCard__duration {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  position: relative;
-  top: 12px;
-  left: 0;
-  /* margin-top: 1rem; */
-  color: var(--secondary);
-  font-size: 1rem;
-}
-
 .audio {
-  position: absolute;
-  bottom: 3rem;
-  right: 2rem;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: var(--primary);
 }
 
 /* Fade in Up animation */
@@ -112,7 +108,7 @@
 }
 
 @media (max-width: 700px) {
-  .SongDetailsCard {
+  .SongDetailsCarsWrapper {
     max-width: 100% ;
     width: 100%;
     bottom: 0;
@@ -147,10 +143,5 @@
 
   .close:before, .close:after {
     height: 15px;
-  }
-
-  .audio {
-    bottom: 25%;
-    right: 5%;
   }
 }

@@ -1,0 +1,34 @@
+.sliderRange {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20rem;
+  height: 4px;
+  border-radius: 20px;
+  outline: none;
+}
+
+.sliderRange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: var(--brand-color);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sliderRange::moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background-color: var(--brand-color);;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sliderRange::before {
+  display: none;
+}
+
+.slider-common {
+  background-color: var(--brand-color);
+}

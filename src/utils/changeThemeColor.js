@@ -7,7 +7,8 @@ const DarkTheme = {
   '--brand-color': '#fddb27ff',
   '--primary': '#010203',
   '--secondary': '#f2f2f2',
-  '--shadow': 'rgba(255, 255, 255, 0.2)'
+  '--shadow': 'rgba(255, 255, 255, 0.2)',
+  '--brand-color-slider-alpha': 'rgba(253,219,39)'
 };
 
 const LightTheme = {

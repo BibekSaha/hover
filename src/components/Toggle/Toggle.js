@@ -5,8 +5,7 @@ const Toggle = props => {
   return (
     <div className="Toggle">
       <label className="switch">
-        <input 
-          onClick={props.onClick}
+        <input
           checked={props.checked}
           onChange={e => props.onChange(e)} 
           type="checkbox" 

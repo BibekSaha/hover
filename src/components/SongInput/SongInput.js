@@ -7,8 +7,8 @@ class SongInput extends React.Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
-    this.props.resetData();
-    this.props.history.push(`/search/${this.state.song.replace(/\s/g, '-')}`);
+    if (!this.state.song.trim()) return;
+    this.props.history.push(`/search/${this.state.song.toLowerCase().trim().replace(/\s/g, '-')}`);
   }
 
   render() {

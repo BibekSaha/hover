@@ -1,36 +1,38 @@
-.song__card__loader {
-  position: absolute;
-  bottom: -0.3rem;
-  right: -0.6rem;
+.audio-button {
+  width: calc(15%);
+  height: 3rem;
+  margin: auto;
 }
 
-.button,
-.paused {
-  box-sizing: border-box;
-  width: 0;
-  height: 37px;
-
-  border-color: transparent transparent transparent var(--secondary);
-  transition: 100ms all ease;
-  cursor: pointer;
-
-  border-style: solid;
-  border-width: 18.5px 0 18.5px 30px;
+.audio-timeline-slider {
+  width: 15rem;
 }
 
-.paused {
-  border-style: double;
-  border-width: 0px 0 0px 30px;
+.audio-timeline-slider,
+.audio-timeline-slider::-webkit-slider-thumb {
+  background-color: var(--secondary);
 }
 
-@media (max-width: 700px) {
-  .button,
-  .paused {
-    height: 25px;
-    border-width: 12.5px 0 12.5px 20px;
+.audio-timeline {
+  font-size: 1rem;
+  width: calc(85%);
+  margin: 4.625px auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.audio-timeline p {
+  margin-top: 0.5rem;
+  padding: 0 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 500px) {
+  .audio-button {
+    height: 1.5rem;
   }
-
-  .paused {
-    border-width: 0px 0 0px 20px;
+  .audio-timeline-slider {
+    width: 10rem;
   }
 }

@@ -1,0 +1,11 @@
+.volume-slider {
+  width: 8.5rem;
+  margin-top: 35px;
+  align-self: center;
+
+}
+
+.volume-slider,
+.volume-slider::-webkit-slider-thumb {
+  background-color: var(--brand-color);
+}

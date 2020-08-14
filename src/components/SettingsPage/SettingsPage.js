@@ -1,6 +1,9 @@
 import React from 'react';
 import ToggleTheme from '../ToggleTheme/ToggleTheme';
 import AudioAutoPlay from '../AudioControllers/AudioAutoPlay/AudioAutoPlay';
+import AudioLoop from '../AudioControllers/AudioLoop/AudioLoop';
+import VolumeSlider from '../AudioControllers/VolumeSlider/VolumeSlider';
+import VolumeIcon from '../Icons/VolumeIcon';
 import './SettingsPage.css';
 
 class SettingsPage extends React.Component {
@@ -15,9 +18,15 @@ class SettingsPage extends React.Component {
         <div className="SettingsPage__item">Auto Play
           <AudioAutoPlay />
         </div>
+        <div className="SettingPage__loop SettingsPage__item"><span className="SettingPage__loop__text">Loop</span>
+          <AudioLoop />
+        </div>
+        <div className="SettingsPage__item"><VolumeIcon />
+          <VolumeSlider />
+        </div>
         <div className="small">
-          <small>The songs are of preview only</small>
-          <small>and are of 30 seconds long</small>
+          <small>Audio settings are applied to the </small>
+          <small>lyrics audio player except the volume one</small>
         </div>
       </div>
     );
