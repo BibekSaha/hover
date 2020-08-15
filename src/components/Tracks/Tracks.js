@@ -3,6 +3,7 @@ import { Store, get, keys } from 'idb-keyval';
 import { withRouter } from 'react-router-dom';
 import TrackCard from '../TrackCard/TrackCard';
 import LastPlayedTrack from '../LastPlayedTrack/LastPlayedTrack';
+import SongNotFound from '../SongNotFound/SongNotFound';
 import './Tracks.css';
 
 class Tracks extends React.Component {
@@ -42,6 +43,10 @@ class Tracks extends React.Component {
       onClick={this.handleOnClick}
     />
     );
+
+    if (trackCards.length === 0) {
+      return <SongNotFound message={`Your searches will appear here`} />;
+    }
 
     return (
       <div className="tracks">
