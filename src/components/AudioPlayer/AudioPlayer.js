@@ -16,46 +16,43 @@ class AudioPlayer extends React.Component {
 
   state = {
     pause: '',
-    showLoader: true,
+    showLoader: cookieParser().autoplay !== '',
     audioCurrentPlayTime: 0,
     duration: 0
   }
 
-  componentWillUnmount() {
-    clearInterval(this.currentAudioTime);
+  onProgress = time => {
+    this.setState({ audioCurrentPlayTime: time.playedSeconds });
   }
 
   onReady = () => {
-    this.audioRef.current.getInternalPlayer().setLoop()
     this.setState({
       showLoader: false,
       pause: this.cookie.autoplay ? 'paused' : ''
     });
   }
 
-  onStart = () => {
-    this.currentAudioTime = setInterval(() => {
-      let audioCurrentPlayTime = this.audioRef.current.getCurrentTime();
-      this.setState({ audioCurrentPlayTime });
-    }, 100);
-  };
-
   onEnd = () => {
-    this.setState({ pause: '' });
+    if (this.cookie.audioloop === 'true') return this.audioRef.current.seekTo(0, 'seconds');
+    this.setState({ pause: ''});
   };
 
   handlePlayPauseClick = () => {
     if (this.state.pause) {
       // song was playing
       this.setState({ pause: '' });
+      this.audioRef.current.getInternalPlayer().pauseVideo();
     } else {
       this.setState({ pause: 'paused' });
+      this.audioRef.current.seekTo(this.state.audioCurrentPlayTime, 'seconds');
+      // needed when the user clicks on play button again if the music ends to play the music from the start
+      this.audioRef.current.getInternalPlayer().playVideo();
     }
-    sessionStorage.setItem(`isNotPlaying`, `${!!this.state.pause}`);
   };
 
   handleSliderChange = e => {
-    this.audioRef.current.seekTo(e.target.value);
+    if (this.state.pause) this.audioRef.current.seekTo(parseInt(e.target.value), 'seconds');
+    else this.setState({ audioCurrentPlayTime: parseInt(e.target.value) });
   }
 
   render() {
@@ -77,7 +74,6 @@ class AudioPlayer extends React.Component {
         <div className="audio-timeline">
           <p>{parseSeconds(this.state.audioCurrentPlayTime)}</p>
           <Slider
-            // disabled={this.state.showLoader}
             min={0}
             max={this.state.duration}
             value={this.state.audioCurrentPlayTime}
@@ -91,13 +87,12 @@ class AudioPlayer extends React.Component {
           url={this.props.audioPreviewURL}
           playing={!!this.state.pause}
           volume={parseInt(this.cookie.volume) / 100 || 0.5}
-          // loop={this.cookie.audioloop === 'true' ? true : false}
-          onStart={this.onStart}
-          onEnded={this.onEnd}
-          onError={() => this.setState({ showLoader: true })}
           onReady={this.onReady}
+          onProgress={this.onProgress}
+          onEnded={this.onEnd}
           onBuffer={() => this.setState({ showLoader: true })}
           onBufferEnd={() => this.setState({ showLoader: false })}
+          onError={() => this.setState({ showLoader: true })}
           onDuration={duration => this.setState({ duration: duration - 1 })}
           width={0}
           height={0}

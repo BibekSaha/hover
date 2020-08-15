@@ -1,10 +1,12 @@
 import React from 'react';
+import SoundWaveIcon from '../Icons/SoundWave';
 import AudioPlayer from '../AudioPlayer/AudioPlayer';
 import './SongDetailsCard.css';
 
 class SongDetailsCard extends React.Component {
   render() {
-    if (!this.props.showSongDetailsCard) return null;
+    if (!this.props.showSongDetailsCard)
+      return <SoundWaveIcon onClick={this.props.bringShowSongDetailsCard} className="sound-wave-icon" />;
     return (
       <React.Fragment>
         <div className="SongDetailsCarsWrapper animated animatedFadeInUp fadeInUp">

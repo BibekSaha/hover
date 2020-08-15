@@ -9,7 +9,7 @@ class Song extends React.Component {
   updateSongComponent() {
     this.props.resetData();
     sessionStorage.clear();
-    const song = this.props.match.params.song.split('-').join(' ');
+    const song = this.props.match.params.song.split('-').join(' ').toLowerCase().trim();
     this.props.getSong(song);
   }
 
@@ -25,23 +25,17 @@ class Song extends React.Component {
   }
 
   render() {
+    if (this.props.data.loading)
+      return  <Loader color="var(--secondary)" size="70" />
     return (
       <React.Fragment>
-        {
-          this.props.data.loading ?
-            <Loader
-              color="var(--secondary)"
-              size="70"
-            /> : null
-        }
         <SongDisplay
           songLyrics={this.props.data.lyrics}
           notFound={this.props.data.notFound}
-          showSongDetailsCard={this.props.data.showSongDetailsCard}
-          bringShowSongDetailsCard={this.props.bringShowSongDetailsCard}
         />
         <SongDetailsCard
           showSongDetailsCard={this.props.data.showSongDetailsCard}
+          bringShowSongDetailsCard={this.props.bringShowSongDetailsCard}
           removeShowSongDetailsCard={this.props.removeShowSongDetailsCard}
           title={this.props.data.fullTitle}
           artist={this.props.data.artistName}

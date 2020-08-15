@@ -11,10 +11,13 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: content-box;
 }
 
 html {
   font-family: "Aktiv Grotesk";
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.02rem;
 }
 
 :root {
@@ -29,4 +32,12 @@ html {
 
 .make-it-yellow {
   color: var(--brand-color);
+}
+
+.small {
+  display: block;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--very-muted);
+  text-align: left;
 }

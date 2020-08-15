@@ -23,8 +23,8 @@
 }
 
 .SongDetailsCard__details {
-  margin: 5px 2.5rem;
-  margin-right: 7rem;
+  padding: 0 2rem;
+  margin: auto 0;
   justify-self: center;
   line-height: 1rem;
 }
@@ -36,6 +36,32 @@
   align-items: center;
   padding: 1rem 1.5rem;
   background-color: var(--primary);
+}
+
+.sound-wave-icon {
+  height: 50px;
+  width: 50px;
+  position: fixed;
+  cursor: pointer;
+  right: 5rem;
+  bottom: 3rem;
+  fill: var(--secondary);
+  background-color: var(--primary);
+  z-index: 9999;
+  border-radius: 50%;
+  box-shadow: 0 6px 20px var(--shadow);
+  animation-name: sound-wave;
+  animation-duration: 300ms;
+}
+
+@keyframes sound-wave {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  0% { opacity:0; }
+  100% { opacity:1; }
 }
 
 /* Fade in Up animation */
@@ -116,7 +142,7 @@
     padding: 0;
     border: none;
     font-size: 1rem;
-    box-shadow: none;
+    /* box-shadow: none; */
     margin: 0;
   }
 
@@ -125,14 +151,16 @@
     width: 100px;
   }
 
-  .SongDetailsCard__duration {
-    font-size: 0.8rem;
-    /* margin-top: 0.8rem; */
-    top: 8px;
+  .SongDetailsCard__details {
+    padding: 0 1.5rem;
   }
 
-  .SongDetailsCard__details {
-    margin: 5px 5px 5px 15px;
+  .sound-wave-icon {
+    height: 50px;
+    width: 50px;
+    right: 1rem;
+    bottom: 1rem;
+    fill: var(--secondary);
   }
 
   .close {

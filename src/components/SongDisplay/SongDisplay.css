@@ -14,34 +14,8 @@
   line-height: 1.5em;
 }
 
-.sound-wave-icon {
-  height: 50px;
-  width: 50px;
-  position: fixed;
-  cursor: pointer;
-  right: 5rem;
-  bottom: 3rem;
-  fill: var(--secondary);
-  background-color: var(--primary);
-  z-index: 9999;
-  border-radius: 50%;
-}
-
-@keyframes fadeIn {
-  0% { opacity:0; }
-  100% { opacity:1; }
-}
-
 @media (max-width: 700px) {
   .SongDisplay {
     font-size: 1.1rem;
-  }
-
-  .sound-wave-icon {
-    height: 50px;
-    width: 50px;
-    right: 1rem;
-    bottom: 1rem;
-    fill: var(--secondary);
   }
 }

@@ -8,6 +8,7 @@ import Header from '../Header/Header';
 import SongInput from '../SongInput/SongInput';
 import Song from '../Song/Song';
 import About from '../About/About';
+import Tracks from '../Tracks/Tracks';
 import Error404Page from '../Error404Page/Error404Page';
 import SettingsPage from '../SettingsPage/SettingsPage';
 import './App.css';
@@ -55,6 +56,7 @@ class App extends React.Component {
         }
       })
       .then(songData => {
+        localStorage.setItem('last-played', song);
         this.setState({
           fullTitle: songData.fullTitle,
           artistName: songData.artistName,
@@ -90,6 +92,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path={['/', '/search/:song']}>
               <SongInput />
+              <Route exact path="/" children={<Tracks />} />
               <Route exact path="/search/:song"
                 children={
                   <Song
