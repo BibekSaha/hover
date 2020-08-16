@@ -4,6 +4,7 @@
   left: 50%;
   margin-top: -100px;
   margin-left: -250px;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   font-size: 1.2rem;
   font-weight: 300;
