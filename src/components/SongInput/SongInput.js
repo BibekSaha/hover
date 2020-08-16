@@ -17,7 +17,7 @@ class SongInput extends React.Component {
         <form onSubmit={e => this.handleFormSubmit(e)}>
           <input
             className="make-it-yellow"
-            placeholder="e.g. hey jude"
+            placeholder="Search for song &amp; lyrics"
             type="text" value={this.props.song}
             onChange={e => this.setState({ song: e.target.value })}
           />

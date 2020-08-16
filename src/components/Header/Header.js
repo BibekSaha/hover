@@ -5,8 +5,8 @@ import './Header.css';
 const Header = () => {
   return (
     <div className="Header">
-      <h1>LYR<span className="make-it-yellow">i</span>CS HOUND</h1>
-      <p>By Bibek Saha</p>
+      <h1>HO<span className="make-it-yellow">V</span>ER</h1>
+      <p>IN HARMONY</p>
       <nav className="Header-nav">
         <ul>
           <li><NavLink exact activeClassName="selected" to="/">Home</NavLink></li>

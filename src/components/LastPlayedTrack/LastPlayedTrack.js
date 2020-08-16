@@ -17,7 +17,7 @@ class LastPlayedTrack extends React.Component {
     const lastPlayedUserTitle = localStorage.getItem('last-played');
     if (lastPlayedUserTitle) {
       get(lastPlayedUserTitle, this.dbStore)
-        .then(resp => this.setState({ lastPlayed: { ...resp, lastPlayedUserTitle} }));
+        .then(resp => this.setState({ lastPlayed: { ...resp, lastPlayedUserTitle, lyrics: ''} }));
     }
   }
 

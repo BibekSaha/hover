@@ -23,6 +23,10 @@
 }
 
 .track-card__details-title {
+  cursor: pointer;
+}
+
+.track-card__details-title {
   font-size: 1.2rem;
   color: var(--secondary);
 }

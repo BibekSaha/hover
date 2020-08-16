@@ -1,19 +1,32 @@
 .Header {
-  font-family: 'Montserrat', sans-serif;
+  /* font-family: 'Montserrat', sans-serif; */
+  font-family: 'Gotham Book';
   letter-spacing: 1px;
   text-align: center;
   font-size: 1.5rem;
   padding: 0.6rem 1rem;
   padding-bottom: 0rem;
-  color: var(--off);
   font-weight: 400;
-} 
+}
+
+.Header h1 {
+  color: var(--off);
+  padding: 0.5rem 0;
+  padding-bottom: 0.4rem;
+  letter-spacing: 1.1rem;
+  text-align: center;
+}
+
+.header-span {
+  font-size: 1rem;
+}
 
 .Header p {
   font-size: 1rem;
   color: var(--muted);
   padding: 1px 2px;
   letter-spacing: 0.08rem;
+  margin-bottom: 1rem;
 }
 
 .Header-nav ul {
@@ -57,7 +70,8 @@
 
 @media (max-width: 700px) {
   .Header {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    /* font-size: 0.89rem; */
   }
 }
 
@@ -65,6 +79,10 @@
   .Header-nav ul {
     margin-left: 0.4rem;
     margin-right: 0.5rem;
+  }
+
+  .Header h1 {
+    margin-left: 1.5rem;
   }
 
   .Header-nav li a {

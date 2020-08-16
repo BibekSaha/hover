@@ -13,7 +13,13 @@ class TrackCard extends React.Component {
           onClick={e => this.props.onClick(e)} 
         />
         <div className="track-card__details">
-          <p><span className="track-card__details-title">{this.props.title}</span></p>
+          <p><span
+            data-user-title={this.props.userTitle}  
+            onClick={e => this.props.onClick(e)} 
+            className="track-card__details-title"
+            >
+              {this.props.title}
+            </span></p>
           <p><span className="track-card__details-artist">{this.props.artist}</span></p>
         </div>
       </div>
