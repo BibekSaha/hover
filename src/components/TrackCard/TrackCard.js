@@ -1,4 +1,5 @@
 import React from 'react';
+// import PlayPauseIcon from '../Icons/PlayPauseIcon';
 import './TrackCard.css';
 
 class TrackCard extends React.Component {
@@ -21,6 +22,7 @@ class TrackCard extends React.Component {
               {this.props.title}
             </span></p>
           <p><span className="track-card__details-artist">{this.props.artist}</span></p>
+          {/* <PlayPauseIcon className="play-pause-icon" /> */}
         </div>
       </div>
     );

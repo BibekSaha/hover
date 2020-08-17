@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch, Route
 } from 'react-router-dom';
-import { Store, get } from 'idb-keyval';
+import { Store, set, get } from 'idb-keyval';
 import Header from '../Header/Header';
 import SongInput from '../SongInput/SongInput';
 import Song from '../Song/Song';
@@ -14,7 +14,7 @@ import SettingsPage from '../SettingsPage/SettingsPage';
 import './App.css';
 import parseCookies from '../../utils/parseCookies';
 import applyTheme from '../../utils/changeThemeColor';
-import addToCache from '../../utils/searchAndFetch';
+// import search from '../../utils/search';
 
 class App extends React.Component {
   state = {
@@ -52,22 +52,26 @@ class App extends React.Component {
       .then(resp => {
         if (resp) return resp;
         else {
-          return addToCache(song, songStore);
+          // return search(song);
+          return fetch(`/api/search?q=${song}`)
+          .then(resp => resp.json())
         }
       })
       .then(songData => {
-        localStorage.setItem('last-played', song);
-        this.setState({
-          fullTitle: songData.fullTitle,
-          artistName: songData.artistName,
-          imageURL: songData.imageURL,
-          audioPreviewURL: songData.audioPreviewURL,
-          lyrics: songData.lyrics,
-          prevSong: song,
-          notFound: false,
-          loading: false,
-          showSongDetailsCard: true,
-        })
+        set(song, songData, songStore).then(() => {
+          localStorage.setItem('last-played', song);
+          this.setState({
+            fullTitle: songData.fullTitle,
+            artistName: songData.artistName,
+            imageURL: songData.imageURL,
+            audioPreviewURL: songData.audioPreviewURL,
+            lyrics: songData.lyrics,
+            prevSong: song,
+            notFound: false,
+            loading: false,
+            showSongDetailsCard: true,
+          })
+        });
       })
       .catch(() => this.setState({
         showSongDetailsCard: false,
@@ -97,7 +101,7 @@ class App extends React.Component {
                 children={
                   <Song
                     resetData={this.resetState}
-                    data={this.state} 
+                    data={this.state}
                     getSong={this.getSong}
                     removeShowSongDetailsCard={this.removeShowSongDetailsCard}
                     bringShowSongDetailsCard={this.bringShowSongDetailsCard}

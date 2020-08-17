@@ -1,5 +1,5 @@
 function parseSeconds(seconds) {
-  seconds = Math.round(seconds);
+  seconds = Math.ceil(seconds);
   if (seconds < 60) {
     seconds = seconds < 10 ? `0${seconds}` : seconds;
     return `00:${seconds}`;

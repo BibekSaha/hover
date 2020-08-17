@@ -5,8 +5,11 @@ import './SongDetailsCard.css';
 
 class SongDetailsCard extends React.Component {
   render() {
-    if (!this.props.showSongDetailsCard)
-      return <SoundWaveIcon onClick={this.props.bringShowSongDetailsCard} className="sound-wave-icon" />;
+    if (!this.props.showSongDetailsCard) {
+      if (!this.props.notFound)
+        return <SoundWaveIcon onClick={this.props.bringShowSongDetailsCard} className="sound-wave-icon" />;
+      return null;
+    }
     return (
       <React.Fragment>
         <div className="SongDetailsCarsWrapper animated animatedFadeInUp fadeInUp">

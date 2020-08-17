@@ -36,6 +36,7 @@ class Song extends React.Component {
         <SongDetailsCard
           showSongDetailsCard={this.props.data.showSongDetailsCard}
           bringShowSongDetailsCard={this.props.bringShowSongDetailsCard}
+          notFound={this.props.data.notFound}
           removeShowSongDetailsCard={this.props.removeShowSongDetailsCard}
           title={this.props.data.fullTitle}
           artist={this.props.data.artistName}

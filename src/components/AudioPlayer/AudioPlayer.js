@@ -16,37 +16,37 @@ class AudioPlayer extends React.Component {
 
   state = {
     pause: '',
-    showLoader: cookieParser().autoplay !== '',
+    showLoader: true,
+    // showLoader: cookieParser().autoplay !== '',
     audioCurrentPlayTime: 0,
     duration: 0
   }
 
   onProgress = time => {
-    this.setState({ audioCurrentPlayTime: time.playedSeconds });
+    // this fuction fires after the onEnded
+    // so the if checking is required so that the user can again play the audio by click the play button when the audio ends
+    if (this.state.pause) this.setState({ audioCurrentPlayTime: time.playedSeconds });
   }
 
   onReady = () => {
     this.setState({
       showLoader: false,
-      pause: this.cookie.autoplay ? 'paused' : ''
+      pause: this.cookie.autoplay ? 'paused' : '',
     });
   }
 
   onEnd = () => {
     if (this.cookie.audioloop === 'true') return this.audioRef.current.seekTo(0, 'seconds');
-    this.setState({ pause: ''});
+    this.setState({ pause: '', audioCurrentPlayTime: 0});
   };
 
   handlePlayPauseClick = () => {
     if (this.state.pause) {
       // song was playing
       this.setState({ pause: '' });
-      this.audioRef.current.getInternalPlayer().pauseVideo();
     } else {
       this.setState({ pause: 'paused' });
       this.audioRef.current.seekTo(this.state.audioCurrentPlayTime, 'seconds');
-      // needed when the user clicks on play button again if the music ends to play the music from the start
-      this.audioRef.current.getInternalPlayer().playVideo();
     }
   };
 
@@ -76,7 +76,7 @@ class AudioPlayer extends React.Component {
           <Slider
             min={0}
             max={this.state.duration}
-            value={this.state.audioCurrentPlayTime}
+            value={Math.ceil(this.state.audioCurrentPlayTime)}
             onChange={this.handleSliderChange}
             className="audio-timeline-slider"
           />
@@ -93,7 +93,7 @@ class AudioPlayer extends React.Component {
           onBuffer={() => this.setState({ showLoader: true })}
           onBufferEnd={() => this.setState({ showLoader: false })}
           onError={() => this.setState({ showLoader: true })}
-          onDuration={duration => this.setState({ duration: duration - 1 })}
+          onDuration={duration => this.setState({ duration })}
           width={0}
           height={0}
         />
