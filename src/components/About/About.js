@@ -4,6 +4,9 @@ import './About.css';
 import bibekSahaImage from '../../assets/images/Bibek-Saha.png';
 
 const About = () => {
+  React.useEffect(() => {
+    document.title = 'About | Hover';
+  }, []);
   return (
     <div className="About">
       <img id="bibek-saha-image" alt="bibek saha" src={bibekSahaImage} />

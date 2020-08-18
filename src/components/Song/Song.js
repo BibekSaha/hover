@@ -14,6 +14,7 @@ class Song extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Search | Hover';
     this.updateSongComponent()
   }
 

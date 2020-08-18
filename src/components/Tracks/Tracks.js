@@ -18,6 +18,7 @@ class Tracks extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Hover';
     keys(this.dbStore).then(keys => this.setState({ keys }))
       .then(() => {
         const tempStoredSongs = [];

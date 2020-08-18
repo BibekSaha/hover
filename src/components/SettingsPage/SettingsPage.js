@@ -7,6 +7,10 @@ import VolumeIcon from '../Icons/VolumeIcon';
 import './SettingsPage.css';
 
 class SettingsPage extends React.Component {
+  componentDidMount() {
+    document.title = 'Settings | Hover';
+  }
+
   render() {
     return (
       <div className="SettingsPage">
