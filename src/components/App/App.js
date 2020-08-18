@@ -58,6 +58,7 @@ class App extends React.Component {
         }
       })
       .then(songData => {
+        if (songData.errorMessage) Promise.reject();
         set(song, songData, songStore).then(() => {
           localStorage.setItem('last-played', song);
           this.setState({

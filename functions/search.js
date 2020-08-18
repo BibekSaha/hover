@@ -46,14 +46,14 @@ const search = (song) => {
     .then(resp => resp.json())
     .then(resp => {
       if (resp.error || !resp.lyrics) {
-        if (!cache.audioPreviewURL) return Promise.reject({ message: 'Nothing found' });
+        if (!cache.audioPreviewURL) return Promise.reject({errorMessage: 'Not Found'});
         cache.lyrics = '';
       } else {
         cache.lyrics = resp.lyrics;
       }
       return cache;
     })
-    .catch((err) => Promise.reject({ message: err }));
+    .catch(() => Promise.reject({errorMessage: 'Not Found'}));
 };
 
 exports.handler = async function (event, context) {
