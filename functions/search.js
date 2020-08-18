@@ -59,10 +59,17 @@ const search = (song) => {
 exports.handler = async function (event, context) {
   if (event.httpMethod === 'GET') {
     const songUserTitle = event.queryStringParameters.q;
-    const response = await search(songUserTitle);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(response)
-    };
+    try {
+      const response = await search(songUserTitle);
+      return {
+        statusCode: 200,
+        body: JSON.stringify(response)
+      };
+    } catch (err) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify(err)
+      };
+    }
   }
 }

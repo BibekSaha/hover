@@ -54,11 +54,13 @@ class App extends React.Component {
         else {
           // return search(song);
           return fetch(`/api/search?q=${song}`)
-          .then(resp => resp.json())
+            .then(resp => {
+              if (!resp.ok) return Promise.reject();
+              else return resp.json();
+            })
         }
       })
       .then(songData => {
-        if (songData.errorMessage) Promise.reject();
         set(song, songData, songStore).then(() => {
           localStorage.setItem('last-played', song);
           this.setState({
