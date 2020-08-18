@@ -24,10 +24,10 @@ class SettingsPage extends React.Component {
         <div className="SettingsPage__item"><VolumeIcon />
           <VolumeSlider />
         </div>
-        <div className="small">
+        {/* <div className="small">
           <small>Audio settings are applied to the </small>
           <small>lyrics audio player except the volume one</small>
-        </div>
+        </div> */}
       </div>
     );
   }
