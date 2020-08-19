@@ -10,7 +10,7 @@ const GENIUS_AUTH_HEADERS = {
 let GENIUS_SONG_DETAILS_URI;
 
 const search = (song) => {
-  const GENIUS_SEARCH_URI = GENIUS_BASE_SEARCH_URI + song;
+  const GENIUS_SEARCH_URI = GENIUS_BASE_SEARCH_URI + encodeURIComponent(song);
   const cache = {
     fullTitle: '',
     artistName: '',
@@ -39,11 +39,12 @@ const search = (song) => {
       cache.audioPreviewURL = youTubeObject.url;
 
       // sanitizing the title and the artist name
-      const artist = cache.artistName.split('&')[0].trim();
-      const title = decodeURI(cache.fullTitle.trim());
+      const artist = encodeURIComponent(cache.artistName.split('&')[0].trim());
+      const title = encodeURIComponent(cache.fullTitle.trim());
       return fetch(`${LYRICS_BASE_URL}/${artist}/${title}`);
     })
-    .then(resp => resp.json())
+    .then(resp => resp.text())
+    .then(resp => JSON.parse(resp))
     .then(resp => {
       if (resp.error || !resp.lyrics) {
         if (!cache.audioPreviewURL) return Promise.reject({errorMessage: 'Not Found'});
