@@ -1,5 +1,4 @@
 .Header {
-  /* font-family: 'Montserrat', sans-serif; */
   font-family: 'Gotham Book';
   letter-spacing: 1px;
   text-align: center;
@@ -32,9 +31,7 @@
 .Header-nav ul {
   align-items: center;
   display: flex;
-  /* font-family: Arial, Helvetica, sans-serif; */
-  font-family: "Aktiv Grotesk";
-  /* font-weight: 400; */
+  font-family: "Display Bold";
   font-size: 1.5rem;
   justify-content: space-evenly;
   list-style: none;

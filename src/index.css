@@ -1,6 +1,11 @@
 @font-face {
-  font-family: "Aktiv Grotesk";
-  src: url("./assets/fonts/AktivGroteskCorp-Bold.woff2");
+  font-family: "Display Medium";
+  src: url("./assets/fonts/medium-display.woff2");
+}
+
+@font-face {
+  font-family: "Display Bold";
+  src: url("./assets/fonts/bold-display.woff2");
 }
 
 @font-face {
@@ -15,7 +20,7 @@
 }
 
 html {
-  font-family: "Aktiv Grotesk";
+  font-family: "Display Bold";
   -webkit-font-smoothing: antialiased;
   font-size: 1.02rem;
 }
