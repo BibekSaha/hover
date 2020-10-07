@@ -6,8 +6,7 @@ import './TrackCard.css';
 
 class TrackCard extends React.Component {
   render() {
-    if (!this.props.userTitle) return null;
-    const link = `/search/${this.props.userTitle.split(' ').join('-')}`;
+    const link = this.props.userTitle ? `/search/${this.props.userTitle.split(' ').join('-')}` : '/';
     return (
       <>
         <CrossIcon
