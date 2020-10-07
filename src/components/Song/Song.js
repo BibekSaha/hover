@@ -14,8 +14,9 @@ class Song extends React.Component {
   }
 
   componentDidMount() {
-    document.title = 'Search | Hover';
-    this.updateSongComponent()
+    this.updateSongComponent();
+    // document.title = `${this.props.data.fullTitle} | Hover`;
+    document.title = 'Song | Hover';
   }
 
   componentDidUpdate(prevProps) { 
@@ -33,6 +34,7 @@ class Song extends React.Component {
         <SongDisplay
           songLyrics={this.props.data.lyrics}
           notFound={this.props.data.notFound}
+          showSongDetailsCard={this.props.data.showSongDetailsCard}
         />
         <SongDetailsCard
           showSongDetailsCard={this.props.data.showSongDetailsCard}

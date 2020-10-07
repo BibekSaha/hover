@@ -1,5 +1,5 @@
 import React from 'react';
-import { Store, get, keys } from 'idb-keyval';
+import { Store, get, keys, del } from 'idb-keyval';
 import { withRouter } from 'react-router-dom';
 import TrackCard from '../TrackCard/TrackCard';
 import LastPlayedTrack from '../LastPlayedTrack/LastPlayedTrack';
@@ -7,41 +7,81 @@ import SongNotFound from '../SongNotFound/SongNotFound';
 import './Tracks.css';
 
 class Tracks extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.dbStore = new Store('songs', 'song-store');
   }
 
+  lastPlayed = localStorage.getItem('last-played');
+
   state = {
     keys: [],
-    storedSongs: []
+    storedSongs: {},
+    showCross: [],
+    currentCross: null,
+  }
+
+  resetShowCross = () => {
+    return this.setState({
+      showCross: new Array(this.state.storedSongs.length).fill(false)
+    });
+  }
+
+  handleCrossIconClick = i => {
+    del(this.state.keys[i], this.dbStore);
+    const keys = [...this.state.keys];
+    const key = keys[i];
+    delete keys[i];
+
+    const storedSongs = { ...this.state.storedSongs };
+    delete storedSongs[key];
+
+    this.setState({ keys, storedSongs });
   }
 
   componentDidMount() {
     document.title = 'Hover';
     keys(this.dbStore).then(keys => this.setState({ keys }))
       .then(() => {
-        const tempStoredSongs = [];
+        const tempStoredSongs = {};
         this.state.keys.forEach(key => {
-          get(key, this.dbStore).then(data => tempStoredSongs.push(data))
-            .then(() => this.setState({ storedSongs: tempStoredSongs }))
+          get(key, this.dbStore).then(data => tempStoredSongs[key] = data)
+            .then(() => {
+              this.setState({
+                storedSongs: tempStoredSongs,
+                showCross: new Array(tempStoredSongs.length).fill(false),
+              });
+              document.body.addEventListener('click', this.resetShowCross);
+            })
         });
       })
   }
 
-  handleOnClick = e => {
-    const songPath = e.target.dataset.userTitle.split(' ').join('-');
-    this.props.history.push(`/search/${songPath}`);
+  componentWillUnmount() {
+    document.body.removeEventListener('click', this.resetShowCross);
   }
 
+  handleShowCross = i => {
+    const showCross = [...this.state.showCross];
+    if (this.state.currentCross !== null)
+      showCross[this.state.currentCross] = false;
+    showCross[i] = true;
+    this.setState({
+      showCross, currentCross: i
+    });
+  }
+
+
   render() {
-    const trackCards = this.state.storedSongs.map((song, i) => <TrackCard
+    const trackCards = Object.values(this.state.storedSongs).map((song, i) => <TrackCard
       key={this.state.keys[i]}
       title={song.fullTitle}
       artist={song.artistName}
       thumbnail={song.imageURL}
       userTitle={this.state.keys[i]}
-      onClick={this.handleOnClick}
+      onMouseOver={() => this.handleShowCross(i)}
+      showCross={this.state.showCross[i]}
+      onIconClick={() => this.handleCrossIconClick(i)}
     />
     );
 
@@ -52,13 +92,13 @@ class Tracks extends React.Component {
     return (
       <div className="tracks">
         <div className="last-played-track">
-          <LastPlayedTrack />
+          <LastPlayedTrack 
+            { ...this.state.storedSongs[this.lastPlayed] } 
+            userTitle={this.lastPlayed} 
+          />
         </div>
-        <div className="hr"></div>
         <div className="all-tracks">
-          <div style={{ textAlign: 'center', marginTop: '3rem', marginBottom: '1.5rem' }}>
-            <div className="small">Search History (A-Z)</div>
-          </div>
+          <div className="small">Search History (A-Z)</div>
           {trackCards}
         </div>
       </div>

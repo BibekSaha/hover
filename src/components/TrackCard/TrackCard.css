@@ -1,10 +1,21 @@
 .track-card {
   margin: 0 auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   font-size: 1.2rem;
   font-weight: 300;
   display: flex;
   word-break: break-all;
+}
+
+.track-card:last-child {
+  margin-bottom: 1rem;
+}
+
+.crossicon {
+  position: relative;
+  top: 0.70rem;
+  left: -0.55rem;
+  cursor: pointer;
 }
 
 .track-card__img {
@@ -24,9 +35,6 @@
 
 .track-card__details-title {
   cursor: pointer;
-}
-
-.track-card__details-title {
   font-size: 1.2rem;
   color: var(--secondary);
 }
@@ -57,6 +65,13 @@
     padding-left: 1rem;
     padding-top: 0.6rem;
     /* padding-top:0rem; */
+  }
+
+  .crossicon {
+    position: relative;
+    top: 0.65rem;
+    left: -0.5rem;
+    cursor: pointer;
   }
 
   .play-pause-icon {
