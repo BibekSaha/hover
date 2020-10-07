@@ -1,6 +1,5 @@
 import React from 'react';
 import { Store, get, keys, del } from 'idb-keyval';
-import { withRouter } from 'react-router-dom';
 import TrackCard from '../TrackCard/TrackCard';
 import LastPlayedTrack from '../LastPlayedTrack/LastPlayedTrack';
 import SongNotFound from '../SongNotFound/SongNotFound';
@@ -23,20 +22,25 @@ class Tracks extends React.Component {
 
   resetShowCross = () => {
     return this.setState({
-      showCross: new Array(this.state.storedSongs.length).fill(false)
+      showCross: new Array(Object.keys(this.state.storedSongs).length).fill(false)
     });
   }
 
   handleCrossIconClick = i => {
-    del(this.state.keys[i], this.dbStore);
-    const keys = [...this.state.keys];
-    const key = keys[i];
-    delete keys[i];
+    const keyToDelete = this.state.keys[i];
 
-    const storedSongs = { ...this.state.storedSongs };
-    delete storedSongs[key];
+    const keys = this.state.keys.filter((_, index) => i !== index);
 
-    this.setState({ keys, storedSongs });
+    const storedSongs = {};
+    Object.keys(this.state.storedSongs).forEach(key => {
+      if (key !== keyToDelete) storedSongs[key] = this.state.storedSongs[key];
+    });
+
+    del(this.state.keys[i], this.dbStore)
+      .then(() => {
+        this.setState({ keys, storedSongs });
+        this.resetShowCross();
+      });
   }
 
   componentDidMount() {
@@ -49,8 +53,8 @@ class Tracks extends React.Component {
             .then(() => {
               this.setState({
                 storedSongs: tempStoredSongs,
-                showCross: new Array(tempStoredSongs.length).fill(false),
               });
+              this.resetShowCross();
               document.body.addEventListener('click', this.resetShowCross);
             })
         });
@@ -74,7 +78,7 @@ class Tracks extends React.Component {
 
   render() {
     const trackCards = Object.values(this.state.storedSongs).map((song, i) => <TrackCard
-      key={this.state.keys[i]}
+      key={i}
       title={song.fullTitle}
       artist={song.artistName}
       thumbnail={song.imageURL}
@@ -106,4 +110,4 @@ class Tracks extends React.Component {
   };
 }
 
-export default withRouter(Tracks);
+export default Tracks;
