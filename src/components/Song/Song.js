@@ -4,31 +4,34 @@ import Loader from '../Loader/Loader';
 import SongDisplay from '../SongDisplay/SongDisplay';
 import SongDetailsCard from '../SongDetailsCard/SongDetailsCard';
 
-
 class Song extends React.Component {
   updateSongComponent() {
     this.props.resetData();
     sessionStorage.clear();
-    const song = this.props.match.params.song.split('-').join(' ').toLowerCase().trim();
+    const song = this.props.match.params.song
+      .split('-')
+      .join(' ')
+      .toLowerCase()
+      .trim();
     this.props.getSong(song);
   }
 
   componentDidMount() {
     this.updateSongComponent();
-    // document.title = `${this.props.data.fullTitle} | Hover`;
     document.title = 'Song | Hover';
   }
 
-  componentDidUpdate(prevProps) { 
-    if (prevProps.match.params.song !== this.props.match.params.song) this.updateSongComponent();
-    else if (prevProps.match.params.song === this.props.match.params.song) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.song !== this.props.match.params.song)
+      this.updateSongComponent();
+    else if (prevProps.match.params.song === this.props.match.params.song)
       this.props.data.showSongDetailsCard = true;
-    }
+    document.title = `${this.props.data.fullTitle || 'Song'} | Hover`;
   }
 
   render() {
     if (this.props.data.loading)
-      return  <Loader color="var(--secondary)" size="70" />
+      return <Loader color="var(--secondary)" size="70" />;
     return (
       <React.Fragment>
         <SongDisplay

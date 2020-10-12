@@ -1,9 +1,15 @@
 const fetch = require("node-fetch");
-const rp = require("request-promise");
 const $ = require("cheerio");
+// const rp = require("request-promise");
+
+// const fetchLyrics = url => {
+//   return rp(url)
+//     .then(html => JSON.stringify({ lyrics: $(".lyrics", html).text().trim() }))
+// };
 
 const fetchLyrics = url => {
-  return rp(url)
+  return fetch(url)
+    .then(resp => resp.text())
     .then(html => JSON.stringify({ lyrics: $(".lyrics", html).text().trim() }))
 };
 
@@ -46,25 +52,16 @@ const search = (song) => {
     .then((resp) => resp.json())
     .then((resp) => resp.response.song.media)
     .then((songMediaData) => {
-      const youTubeObject = songMediaData.find(
+      let youTubeObject = songMediaData.find(
         (mediaObj) => mediaObj.provider === "youtube"
       );
+      if (!youTubeObject) youTubeObject = { url: '' };
       cache.audioPreviewURL = youTubeObject.url;
-
-      // sanitizing the title and the artist name
-      const artist = encodeURIComponent(cache.artistName.split("&")[0].trim());
-      const title = encodeURIComponent(cache.fullTitle.trim());
       return fetchLyrics(GENIUS_LYRICS_URI);
     })
     .then((resp) => JSON.parse(resp))
     .then((resp) => {
-      // if (resp.error || !resp.lyrics) {
-      //   if (!cache.audioPreviewURL)
-      //     return Promise.reject({ errorMessage: "Not Found" });
-      //   cache.lyrics = "";
-      // } else {
-        cache.lyrics = resp.lyrics;
-      // }
+      cache.lyrics = resp.lyrics;
       return cache;
     })
     .catch(() => Promise.reject({ errorMessage: "Not Found" }));
