@@ -7,10 +7,32 @@ const $ = require("cheerio");
 //     .then(html => JSON.stringify({ lyrics: $(".lyrics", html).text().trim() }))
 // };
 
-const fetchLyrics = url => {
-  return fetch(url)
-    .then(resp => resp.text())
-    .then(html => JSON.stringify({ lyrics: $(".lyrics", html).text().trim() }))
+const fetchLyrics = async url => {
+  try {
+    const htmlResp = await fetch(url);
+    const html = await htmlResp.text();
+  
+    console.log(url);
+    
+    let className = html.indexOf('Lyrics__Container-sc-1ynbvzw-6') !== -1 ? 'Lyrics__Container-sc-1ynbvzw-6': 
+    'lyrics';
+    
+    // const lyricsContainer = html.match(/(Lyrics__Container).*/);
+  
+    // if (lyricsContainer) {
+    //   const [classNameUnsanitized] = lyricsContainer;
+    //   sanitizedIndex = classNameUnsanitized.indexOf('"');
+    //   className = classNameUnsanitized.substring(0, sanitizedIndex);
+    // }
+  
+    const responseObject = JSON.stringify({ 
+      lyrics: $(`.${className}`, html).text().trim() 
+    });
+  
+    return responseObject;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const GENIUS_BASE_URI = "https://api.genius.com";
