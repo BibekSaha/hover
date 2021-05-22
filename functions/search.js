@@ -1,21 +1,25 @@
 const fetch = require("node-fetch");
-const $ = require("cheerio");
-// const rp = require("request-promise");
-
-// const fetchLyrics = url => {
-//   return rp(url)
-//     .then(html => JSON.stringify({ lyrics: $(".lyrics", html).text().trim() }))
-// };
+const cheerio = require("cheerio");
 
 const fetchLyrics = async url => {
   try {
     const htmlResp = await fetch(url);
     const html = await htmlResp.text();
+    const $ = cheerio.load(html);
   
     console.log(url);
     
-    let className = html.indexOf('Lyrics__Container-sc-1ynbvzw-6') !== -1 ? 'Lyrics__Container-sc-1ynbvzw-6': 
+    const className = html.indexOf('Lyrics__Container-sc-1ynbvzw-6') !== -1 ? 'Lyrics__Container-sc-1ynbvzw-6': 
     'lyrics';
+
+    console.log(className);
+
+    // If the classname is simple one
+    // then no need to do the extra shenanigans
+    if (className === 'lyrics')
+      return JSON.stringify({
+        lyrics: $('div.lyrics').text().trim()
+      });
     
     // const lyricsContainer = html.match(/(Lyrics__Container).*/);
   
@@ -24,12 +28,32 @@ const fetchLyrics = async url => {
     //   sanitizedIndex = classNameUnsanitized.indexOf('"');
     //   className = classNameUnsanitized.substring(0, sanitizedIndex);
     // }
-  
-    const responseObject = JSON.stringify({ 
-      lyrics: $(`.${className}`, html).text().trim() 
+
+    let lyrics = [];
+
+    // Push all the div that contain the classname into lyrics as html
+    $(`div.${className}`)
+      .each(
+        (i, e) => lyrics.push(cheerio.load(e).html())
+      );
+
+    // Replace the <br> with \n of each element of lyrics
+    lyrics = lyrics.map(el => {
+      el = el.replace(/\<br\>/g, '\n');
+      lyrics = cheerio.load(el).text().trim();
+      return lyrics;
     });
+
+    // Join each element with a new line 
+    lyrics = lyrics.join('\n');
+
+    return JSON.stringify({ lyrics });
+
+    // const responseObject = JSON.stringify({ 
+    //   lyrics: $(`.${className}`, html).text().trim() 
+    // });
   
-    return responseObject;
+    // return responseObject;
   } catch (err) {
     console.error(err);
   }
