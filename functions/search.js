@@ -31,7 +31,7 @@ const fetchLyrics = async url => {
 
     let lyrics = [];
 
-    // Push all the div that contain the classname into lyrics as html
+    // Push all the div that contains the classname into lyrics as html
     $(`div.${className}`)
       .each(
         (i, e) => lyrics.push(cheerio.load(e).html())
@@ -40,8 +40,7 @@ const fetchLyrics = async url => {
     // Replace the <br> with \n of each element of lyrics
     lyrics = lyrics.map(el => {
       el = el.replace(/\<br\>/g, '\n');
-      lyrics = cheerio.load(el).text().trim();
-      return lyrics;
+      return cheerio.load(el).text().trim();
     });
 
     // Join each element with a new line 
