@@ -53,6 +53,7 @@ const Song = () => {
         const resp = await fetch(`/api/v1/songs/${slug}`);
         const { data } = await resp.json();
         const songData = tempResponseCreator(data);
+        window.history.replaceState(null, null, `/song/${slug}`);
         setStore({ ...songData, notFound: false });
         setLoading(false);
 
