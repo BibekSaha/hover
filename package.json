@@ -16,10 +16,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "cd backend && npm install --production",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "dev": "netlify dev",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "netlify dev"
   },
   "eslintConfig": {
     "extends": "react-app"
