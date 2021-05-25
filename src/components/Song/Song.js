@@ -53,7 +53,9 @@ const Song = () => {
         const resp = await fetch(`/api/v1/songs/${slug}`);
         const { data } = await resp.json();
         const songData = tempResponseCreator(data);
-        window.history.replaceState(null, null, `/song/${slug}`);
+        // If the url slug is still not in right format
+        const newUrlSlug = `${data.title.toLowerCase().replace(/\s/g, '-')}-${data.id}`;
+        window.history.replaceState(null, null, `/song/${newUrlSlug}`);
         setStore({ ...songData, notFound: false });
         setLoading(false);
 
