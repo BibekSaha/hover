@@ -60,7 +60,7 @@ const Song = () => {
         setLoading(false);
 
         document.title = `${songData.fullTitle} | Hover`;
-        await set(slug, songData, songStore);
+        await set(newUrlSlug, songData, songStore);
         localStorage.setItem('last-played', slug);
       } catch (err) {
         setLoading(false);
