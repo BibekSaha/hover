@@ -53,7 +53,7 @@ const Song = () => {
         const resp = await fetch(`/api/v1/songs/${slug}`);
         const { data } = await resp.json();
         const songData = tempResponseCreator(data);
-        // If the url slug is still not in right format
+        // If the url slug is not in right format
         const newUrlSlug = `${data.title.toLowerCase().replace(/\s/g, '-')}-${data.id}`;
         window.history.replaceState(null, null, `/song/${newUrlSlug}`);
         setStore({ ...songData, notFound: false });
@@ -61,7 +61,7 @@ const Song = () => {
 
         document.title = `${songData.fullTitle} | Hover`;
         await set(newUrlSlug, songData, songStore);
-        localStorage.setItem('last-played', slug);
+        localStorage.setItem('last-played', newUrlSlug);
       } catch (err) {
         setLoading(false);
         setStore({ ...INITIAL_STATE, notFound: true });
