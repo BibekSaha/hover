@@ -1,6 +1,6 @@
 [build]
   functions="backend"
-  command="npm run build"
+  command="npm run prebuild && npm run build"
   publish="build"
 
 [[redirects]]
