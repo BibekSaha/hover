@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "prebuild": "cd backend && npm install --production",
+    "prebuild": "cd backend && npm install --production && cd ..",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "dev": "netlify dev",
     "test": "react-scripts test",
