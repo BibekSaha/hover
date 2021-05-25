@@ -18,7 +18,8 @@ exports.getSearchResults = async (req, res, next) => {
     responseData = responseData.map(el => select(
       el, 
       'song_art_image_thumbnail_url', 'id', 'primary_artist',
-      'url', 'lyrics_state', 'title'
+      'title',
+      // 'url', 'lyrics_state'
     ));
 
     responseData.forEach(el => {
@@ -30,7 +31,7 @@ exports.getSearchResults = async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      body: responseData
+      data: responseData
     });
   } catch (err) {
     next(err);

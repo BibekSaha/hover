@@ -1,14 +1,26 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { withStore } from '../../store';
 import './SongInput.css';
 
 class SongInput extends React.Component {
-  state = { song: '' };
+  state = { song: '', prevSong: '' };
+  setStore = this.props.SET_STORE;
 
   handleFormSubmit(e) {
     e.preventDefault();
-    if (!this.state.song.trim()) return;
-    this.props.history.push(`/song/${this.state.song.toLowerCase().trim().replace(/\s/g, '-')}`);
+    const songInput = this.state.song.toLowerCase().trim();
+    if (!songInput) return;
+    if (songInput === this.state.prevSong) 
+      return this.setStore({ showSongDetailsCard: true });
+    const urlString = songInput.replace(/\s/g, '-');
+    this.setState({ prevSong: songInput });
+    this.props.history.push(`/song/${urlString}`);
+  }
+
+  componentDidUpdate() {
+    if (this.state.prevSong && this.props.location.pathname === '/')
+      this.setState({ prevSong: '' });
   }
 
   render() {
@@ -18,7 +30,7 @@ class SongInput extends React.Component {
           <input
             className="make-it-yellow"
             placeholder="Search for song &amp; lyrics"
-            type="text" value={this.props.song}
+            type="text" value={this.state.song}
             onChange={e => this.setState({ song: e.target.value })}
           />
           <i onClick={e => this.handleFormSubmit(e)} className="gg-search"></i>
@@ -28,4 +40,4 @@ class SongInput extends React.Component {
   }
 }
 
-export default withRouter(SongInput);
+export default withRouter(withStore(SongInput));

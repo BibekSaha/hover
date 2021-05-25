@@ -45,20 +45,21 @@ class Tracks extends React.Component {
 
   componentDidMount() {
     document.title = 'Hover';
-    keys(this.dbStore).then(keys => this.setState({ keys }))
-      .then(() => {
-        const tempStoredSongs = {};
-        this.state.keys.forEach(key => {
-          get(key, this.dbStore).then(data => tempStoredSongs[key] = data)
-            .then(() => {
-              this.setState({
-                storedSongs: tempStoredSongs,
-              });
-              this.resetShowCross();
-              document.body.addEventListener('click', this.resetShowCross);
-            })
+    const doAsyncWork = async () => {
+      const keysOfDB = await keys(this.dbStore)
+      this.setState({ keys: keysOfDB });
+      const tempStoredSongs = {};
+      this.state.keys.forEach(async key => {
+        const data = await get(key, this.dbStore)
+        tempStoredSongs[key] = data;
+        this.setState({
+          storedSongs: tempStoredSongs,
         });
-      })
+      });
+      this.resetShowCross();
+      document.body.addEventListener('click', this.resetShowCross);
+    };
+    doAsyncWork();
   }
 
   componentWillUnmount() {
@@ -82,7 +83,7 @@ class Tracks extends React.Component {
       title={song.fullTitle}
       artist={song.artistName}
       thumbnail={song.imageURL}
-      userTitle={this.state.keys[i]}
+      link={`/song/${this.state.keys[i]}`}
       onMouseOver={() => this.handleShowCross(i)}
       showCross={this.state.showCross[i]}
       onIconClick={() => this.handleCrossIconClick(i)}
@@ -98,7 +99,7 @@ class Tracks extends React.Component {
         <div className="last-played-track">
           <LastPlayedTrack 
             { ...this.state.storedSongs[this.lastPlayed] } 
-            userTitle={this.lastPlayed} 
+            link={`/song/${this.lastPlayed}`}
           />
         </div>
         <div className="all-tracks">

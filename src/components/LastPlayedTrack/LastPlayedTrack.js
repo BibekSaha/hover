@@ -10,7 +10,7 @@ const LastPlayedTrack = props => {
         title={props.fullTitle}
         artist={props.artistName}
         thumbnail={props.imageURL}
-        userTitle={props.userTitle}
+        link={props.link}
         onMouseOver={() => { }}
       />
     </div>

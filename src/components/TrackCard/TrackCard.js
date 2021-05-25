@@ -6,7 +6,7 @@ import './TrackCard.css';
 
 class TrackCard extends React.Component {
   render() {
-    const link = this.props.userTitle ? `/song/${this.props.userTitle.split(' ').join('-')}` : '/';
+    // const link = this.props.userTitle ? `/song/${this.props.userTitle.split(' ').join('-')}` : '/';
     return (
       <>
         <CrossIcon
@@ -22,18 +22,16 @@ class TrackCard extends React.Component {
           onClick={e => { e.stopPropagation(); this.props.onMouseOver() }}
           className="track-card"
         >
-          <Link to={link}>
+          <Link to={this.props.link}>
             <img
               className="track-card__img"
               src={this.props.thumbnail}
               alt={this.props.title}
-              data-user-title={this.props.userTitle}
             />
           </Link>
           <div className="track-card__details">
-            <Link to={link} style={{ textDecoration: 'none' }}>
+            <Link to={this.props.link} style={{ textDecoration: 'none' }}>
               <p><span
-                data-user-title={this.props.userTitle}
                 className="track-card__details-title"
               >
                 {this.props.title}

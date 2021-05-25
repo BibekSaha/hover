@@ -6,7 +6,7 @@ const Error404Page = () => {
   return (
     <div className="error">
       <h1>
-        Feeling Lost! Going to <Link className="make-it-yellow" exact to="/">Home</Link> might help
+        Feeling Lost! Going to <Link className="make-it-yellow" to="/">Home</Link> might help
       </h1>
     </div>
   );

@@ -7,9 +7,8 @@ module.exports = async url => {
     url = url.toLowerCase();
     console.log(url);
     const cachedLyrics = await promisify(cache.get).call(cache, url);
-    if (cachedLyrics !== null) {
+    if (cachedLyrics !== null)
       return { lyrics: cachedLyrics };
-    }
     /**
      * fetchLyrics(url)
      *    --> { lyrics: ~ the lyrics goes here ~ }
@@ -18,7 +17,7 @@ module.exports = async url => {
     if (lyricsData.lyrics)
       cache.set(url, lyricsData.lyrics);
     return lyricsData;
-  } catch (err) {
+  } catch {
     return { lyrics: '' }
   }
 };

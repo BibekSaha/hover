@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Store, set, get } from 'idb-keyval';
 import Header from '../Header/Header';
 import SongInput from '../SongInput/SongInput';
 import Song from '../Song/Song';
@@ -11,83 +10,12 @@ import SettingsPage from '../SettingsPage/SettingsPage';
 import './App.css';
 import parseCookies from '../../utils/parseCookies';
 import applyTheme from '../../utils/changeThemeColor';
-// import search from '../../utils/search';
 
 class App extends React.Component {
-  state = {
-    lyrics: '\0',
-    notFound: false,
-    loading: false,
-    fullTitle: '',
-    artistName: '',
-    imageURL: '',
-    showSongDetailsCard: false,
-    audioPreviewURL: '',
-  };
-
   componentDidMount() {
     const theme = parseCookies().theme || 'darkTheme';
     applyTheme(theme);
   }
-
-  resetState = () => {
-    this.setState({
-      loading: true,
-      fullTitle: '',
-      artistName: '',
-      imageURL: '',
-      lyrics: '\0',
-      showSongDetailsCard: false,
-      audioPreviewURL: '',
-    });
-  };
-
-  getSong = song => {
-    const songStore = new Store('songs', 'song-store');
-
-    get(song, songStore)
-      .then(resp => {
-        if (resp) return resp;
-        else {
-          // return search(song);
-          return fetch(`/api/search?q=${song}`).then(resp => {
-            if (!resp.ok) return Promise.reject();
-            else return resp.json();
-          });
-        }
-      })
-      .then(songData => {
-        set(song, songData, songStore).then(() => {
-          localStorage.setItem('last-played', song);
-          this.setState({
-            fullTitle: songData.fullTitle,
-            artistName: songData.artistName,
-            imageURL: songData.imageURL,
-            audioPreviewURL: songData.audioPreviewURL,
-            lyrics: songData.lyrics,
-            prevSong: song,
-            notFound: false,
-            loading: false,
-            showSongDetailsCard: true,
-          });
-        });
-      })
-      .catch(() =>
-        this.setState({
-          showSongDetailsCard: false,
-          notFound: true,
-          loading: false,
-        })
-      );
-  };
-
-  removeShowSongDetailsCard = () => {
-    this.setState({ showSongDetailsCard: false });
-  };
-
-  bringShowSongDetailsCard = () => {
-    this.setState({ showSongDetailsCard: true });
-  };
 
   render() {
     return (
@@ -95,21 +23,13 @@ class App extends React.Component {
         <div>
           <Header />
           <Switch>
-            <Route exact path={['/', '/song/:song']}>
+            <Route exact path={['/', '/song/:songSlug']}>
               <SongInput />
               <Route exact path="/" children={<Tracks />} />
               <Route
                 exact
-                path="/song/:song"
-                children={
-                  <Song
-                    resetData={this.resetState}
-                    data={this.state}
-                    getSong={this.getSong}
-                    removeShowSongDetailsCard={this.removeShowSongDetailsCard}
-                    bringShowSongDetailsCard={this.bringShowSongDetailsCard}
-                  />
-                }
+                path="/song/:songSlug"
+                children={<Song />}
               />
             </Route>
             <Route exact path="/about">

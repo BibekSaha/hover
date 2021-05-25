@@ -1,12 +1,18 @@
 [build]
-  functions="functions"
+  functions="backend"
   command="npm run build"
   publish="build"
 
 [[redirects]]
-  from="/api/*"
-  to="/.netlify/functions/:splat"
+  from="/api/v1/*"
+  to="/.netlify/functions/app/:splat"
   status=200
+  
+# [[redirects]]
+#  from="/api/*"
+#  to="/.netlify/functions/:splat"
+#  status=200
+
 
 [[redirects]]
   from="/*"
