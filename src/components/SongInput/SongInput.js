@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import Store, { withStore } from '../../store';
+import { withStore } from '../../store';
 import './SongInput.css';
 
 import globalObject from '../../utils/global';
