@@ -14,7 +14,7 @@ const About = () => {
         Hi! I am <strong className="make-it-yellow">Bibek Saha</strong> and I'm the creator of Hover in Harmony<br /><br />
         Hover in Harmony is an FREE service where one can listen to the music and read the lyrics at the same time<br/><br/>
         This is definitely one of the complicated project that I undertook. It has been an absolute joy working on this<br /><br />
-        In future if I will try to add more features. If you find any bug do ping me on social media, the links are given below. I will try to patch it<br/><br/>
+        In future if I will try to add more features. If you find any bug please create a issue on GitHub or do ping me on social media, the links are given below. I will try to patch it<br/><br/>
         <em style={{fontSize: '0.9rem', color: 'var(--very-muted)'}}>Disclaimer: The rights to the song and lyrics goes to the individual artist and the record label</em>
         <Footer />
       </div>

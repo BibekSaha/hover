@@ -1,7 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { withStore } from '../../store';
+import Store, { withStore } from '../../store';
 import './SongInput.css';
+
+import globalObject from '../../utils/global';
 
 class SongInput extends React.Component {
   state = { song: '', prevSong: '' };
@@ -9,6 +11,9 @@ class SongInput extends React.Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
+    // When a new song is searched
+    // start playing from the start
+    sessionStorage.clear();
     const songInput = this.state.song.toLowerCase().trim();
     if (!songInput) return;
     if (songInput === this.state.prevSong) 
@@ -23,6 +28,20 @@ class SongInput extends React.Component {
       this.setState({ prevSong: '' });
   }
 
+  handleOnFocus = () => {
+    if (globalObject.spacebarHandleSong) {
+      document.removeEventListener('keydown', globalObject.spacebarHandleSong);
+    }
+  }
+
+  handleOnBlur = () => {
+    if (
+      globalObject.spacebarHandleSong &&
+      this.props.STORE.showSongDetailsCard 
+    )
+      document.addEventListener('keydown', globalObject.spacebarHandleSong);
+  }
+
   render() {
     return (
       <div className="SongInput">
@@ -30,8 +49,11 @@ class SongInput extends React.Component {
           <input
             className="make-it-yellow"
             placeholder="Search for song &amp; lyrics"
-            type="text" value={this.state.song}
+            type="text" 
+            value={this.state.song}
             onChange={e => this.setState({ song: e.target.value })}
+            onFocus={this.handleOnFocus}
+            onBlur={this.handleOnBlur}
           />
           <i onClick={e => this.handleFormSubmit(e)} className="gg-search"></i>
         </form>

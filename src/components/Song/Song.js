@@ -1,8 +1,8 @@
-/* eslint-disable */
+/* eslint-disablee */
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Store, set, get } from 'idb-keyval';
+import { set, get } from 'idb-keyval';
 import { useStore } from '../../store';
 import Loader from '../Loader/Loader';
 import SongDisplay from '../SongDisplay/SongDisplay';
@@ -10,6 +10,7 @@ import SongDetailsCard from '../SongDetailsCard/SongDetailsCard';
 import tempResponseCreator from '../../utils/tempResponseCreator';
 import constructSearchUri from '../../utils/constructSearchUri';
 import INITIAL_STATE from '../../store/__init__';
+import songStore from '../../utils/songStore';
 
 /* data fetching component */
 const Song = () => {
@@ -17,22 +18,25 @@ const Song = () => {
   // DO NOT INCLUDE setStore IN DEPENDENCY ARRAY
   const [,setStore] = useStore();
   const [loading, setLoading] = useState(true);
+
+  const searchForSongInLocalCache = async (songSlug) => {
+    let cachedSong = await get(songSlug, songStore);
+    if (cachedSong) {
+      document.title = `${cachedSong.fullTitle} | Hover`;
+      setStore({ ...cachedSong, notFound: false });
+      setLoading(false);
+    }
+    return !!cachedSong;
+  };
   
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setStore(INITIAL_STATE);
       try {
-        const songStore = new Store('songs', 'song-store');
-        let cachedSong = await get(songSlug, songStore);
-        if (cachedSong) {
-          document.title = `${cachedSong.fullTitle} | Hover`;
-          setStore({ ...cachedSong, notFound: false });
-          setLoading(false);
-          return;
-        }
-        
+        if (await searchForSongInLocalCache(songSlug)) return;
         let slug = songSlug;
+
         if (!songSlug.match(/(\d+)(?!.*\d)$/)) {
           // e.g. /song/let-it-be
           const songSearchString = slug.toLowerCase().replace(/-/g, ' ');
@@ -41,27 +45,24 @@ const Song = () => {
           if (!tempSongData) throw new Error();
           slug = constructSearchUri(tempSongData.title, tempSongData.id);
           document.title = `${tempSongData.title} | Hover`;
-          window.history.replaceState(null, `${tempSongData.title} | Hover`, `/song/${slug}`);
+          window.history.replaceState(null, null, `/song/${slug}`);
           // check again if the song with the title and id exists in the cache
-          cachedSong = await get(slug, songStore);
-          if (cachedSong) {
-            setStore({ ...cachedSong, notFound: false});
-            setLoading(false);
-            return;
-          }
+          if (await searchForSongInLocalCache(slug)) return;
         }
+
         const resp = await fetch(`/api/v1/songs/${slug}`);
         const { data } = await resp.json();
+        // If the url slug is not in the right format
+        slug = constructSearchUri(data.title, data.id);
+        document.title = `${data.title} | Hover`;
+        window.history.replaceState(null, null, `/song/${slug}`);
+
         const songData = tempResponseCreator(data);
-        // If the url slug is not in right format
-        const newUrlSlug = `${data.title.toLowerCase().replace(/\s/g, '-')}-${data.id}`;
-        window.history.replaceState(null, null, `/song/${newUrlSlug}`);
         setStore({ ...songData, notFound: false });
         setLoading(false);
 
-        document.title = `${songData.fullTitle} | Hover`;
-        await set(newUrlSlug, songData, songStore);
-        localStorage.setItem('last-played', newUrlSlug);
+        await set(slug, songData, songStore);
+        localStorage.setItem('last-played', slug);
       } catch (err) {
         setLoading(false);
         setStore({ ...INITIAL_STATE, notFound: true });
@@ -72,6 +73,8 @@ const Song = () => {
 
   useEffect(() => {
     document.title = 'Song | Hover';
+    // When the user reloads then start playing the song from the start
+    sessionStorage.clear();
   }, []);
 
   if (loading)

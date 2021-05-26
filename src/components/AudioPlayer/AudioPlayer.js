@@ -7,6 +7,8 @@ import cookieParser from '../../utils/parseCookies';
 import parseSeconds from '../../utils/parseSeconds';
 import './AudioPlayer.css';
 
+import globalObject from '../../utils/global';
+
 class AudioPlayer extends React.Component {
   constructor(props) {
     super(props);
@@ -18,14 +20,17 @@ class AudioPlayer extends React.Component {
     pause: '',
     showLoader: true,
     // showLoader: cookieParser().autoplay !== '',
-    audioCurrentPlayTime: 0,
+    audioCurrentPlayTime: sessionStorage.getItem('audioCurrentTime') || 0,
     duration: 0
   }
 
   onProgress = time => {
     // this fuction fires after the onEnded
     // so the if checking is required so that the user can again play the audio by click the play button when the audio ends
-    if (this.state.pause) this.setState({ audioCurrentPlayTime: time.playedSeconds });
+    if (this.state.pause && !this.changing) {
+      this.setState({ audioCurrentPlayTime: time.playedSeconds });
+      sessionStorage.setItem('audioCurrentTime', this.state.audioCurrentPlayTime);
+    }
   }
 
   onReady = () => {
@@ -51,10 +56,34 @@ class AudioPlayer extends React.Component {
   };
 
   handleSliderChange = e => {
-    if (this.state.pause) this.audioRef.current.seekTo(parseInt(e.target.value), 'seconds');
-    else this.setState({ audioCurrentPlayTime: parseInt(e.target.value) });
+    this.changing = true;
+    this.setState({ audioCurrentPlayTime: parseFloat(e.target.value) });
+    sessionStorage.setItem('audioCurrentTime', this.state.audioCurrentPlayTime)
   }
 
+  handleSliderMouseUp = e => {
+    if (this.state.pause) 
+      this.audioRef.current.seekTo(parseInt(e.target.value), 'seconds');
+    this.changing = false;
+    // else 
+      // this.setState({ audioCurrentPlayTime: parseInt(e.target.value) });
+  };
+
+  componentDidMount() {
+    // When the space bar is pressed play or pause the song
+    globalObject.spacebarHandleSong = e => {
+      e.preventDefault();
+      if (e.code === 'Space')
+        this.handlePlayPauseClick();
+    }
+    document.addEventListener('keydown', globalObject.spacebarHandleSong);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', globalObject.spacebarHandleSong);
+    delete globalObject.spacebarHandleSong;
+  }
+ 
   render() {
     if (!ReactPlayer.canPlay(this.props.audioPreviewURL)) return null;
     let size = 46.25;
@@ -78,6 +107,7 @@ class AudioPlayer extends React.Component {
             max={this.state.duration}
             value={Math.ceil(this.state.audioCurrentPlayTime)}
             onChange={this.handleSliderChange}
+            onMouseUp={this.handleSliderMouseUp}
             className="audio-timeline-slider"
           />
           <p>{parseSeconds(this.state.duration)}</p>

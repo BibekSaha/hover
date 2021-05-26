@@ -1,16 +1,12 @@
 import React from 'react';
-import { Store, get, keys, del } from 'idb-keyval';
+import { get, keys, del } from 'idb-keyval';
 import TrackCard from '../TrackCard/TrackCard';
 import LastPlayedTrack from '../LastPlayedTrack/LastPlayedTrack';
 import SongNotFound from '../SongNotFound/SongNotFound';
+import songStore from '../../utils/songStore';
 import './Tracks.css';
 
 class Tracks extends React.Component {
-  constructor() {
-    super();
-    this.dbStore = new Store('songs', 'song-store');
-  }
-
   lastPlayed = localStorage.getItem('last-played');
 
   state = {
@@ -36,7 +32,7 @@ class Tracks extends React.Component {
       if (key !== keyToDelete) storedSongs[key] = this.state.storedSongs[key];
     });
 
-    del(this.state.keys[i], this.dbStore)
+    del(this.state.keys[i], songStore)
       .then(() => {
         this.setState({ keys, storedSongs });
         this.resetShowCross();
@@ -46,11 +42,11 @@ class Tracks extends React.Component {
   componentDidMount() {
     document.title = 'Hover';
     const doAsyncWork = async () => {
-      const keysOfDB = await keys(this.dbStore)
+      const keysOfDB = await keys(songStore)
       this.setState({ keys: keysOfDB });
       const tempStoredSongs = {};
       this.state.keys.forEach(async key => {
-        const data = await get(key, this.dbStore)
+        const data = await get(key, songStore)
         tempStoredSongs[key] = data;
         this.setState({
           storedSongs: tempStoredSongs,

@@ -9,6 +9,7 @@ const Slider = props => {
         min={props.min} max={props.max} 
         value={props.value}
         onChange={e => props.onChange(e)}
+        onMouseUp={e => props.onMouseUp(e)}
         disabled={props.disabled}
         type="range"
       />

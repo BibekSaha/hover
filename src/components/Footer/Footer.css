@@ -2,15 +2,44 @@
   margin: 5px 0 0 0;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .footer svg {
-  padding: 10px 15px 0px 15px;
+  /* padding: 10px 15px 0px 15px; */
+  margin-right: 1.5em;
   fill: var(--muted);
   transition: all 0.3s ease 0s;
+}
+
+.footer .footer-linkedin {
+  padding-top: 7px;
 }
 
 .footer svg:hover {
   transform: scale(1.15);
   fill: var(--brand-color);
+}
+
+@media (max-width: 700px) {
+  .footer {
+    margin-left: 0.5rem;
+    justify-content: space-between;
+    /* align-items: center; */
+  }
+
+  .footer .footer-linkedin {
+  }
+
+  .footer .footer-github {
+    padding-top: 0.1rem;
+    padding-left: 0.2rem;
+    padding-right: -1rem;
+  }
+
+  .footer svg {
+    padding: 0;
+    margin-right: 0.7rem;
+    /* margin: 0; */
+  }
 }
