@@ -10,6 +10,7 @@ const Slider = props => {
         value={props.value}
         onChange={e => props.onChange(e)}
         onMouseUp={e => props.onMouseUp(e)}
+        onTouchEnd={e => props.onMouseUp(e)}
         disabled={props.disabled}
         type="range"
       />
