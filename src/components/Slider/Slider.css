@@ -17,9 +17,9 @@
   cursor: pointer;
 }
 
-.sliderRange::moz-range-thumb {
-  width: 25px;
-  height: 25px;
+.sliderRange::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
   background-color: var(--brand-color);;
   border-radius: 50%;
   cursor: pointer;
@@ -31,4 +31,13 @@
 
 .slider-common {
   background-color: var(--brand-color);
+}
+
+#slider-disable-color,
+#slider-disable-color::-webkit-slider-thumb{
+  background-color: var(--slider-mute);
+}
+
+#slider-disable-color::-moz-range-thumb {
+  background-color: var(--slider-mute);
 }

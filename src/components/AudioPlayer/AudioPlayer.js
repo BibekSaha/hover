@@ -38,7 +38,8 @@ class AudioPlayer extends React.Component {
       showLoader: false,
       pause: this.cookie.autoplay ? 'paused' : '',
     });
-    this.audioRef.current.seekTo(this.state.audioCurrentPlayTime, 'seconds');
+    if (this.cookie.autoplay) 
+      this.audioRef.current.seekTo(this.state.audioCurrentPlayTime, 'seconds');
   }
 
   onEnd = () => {
@@ -109,6 +110,7 @@ class AudioPlayer extends React.Component {
             value={Math.ceil(this.state.audioCurrentPlayTime)}
             onChange={this.handleSliderChange}
             onMouseUp={this.handleSliderMouseUp}
+            disabled={this.state.showLoader}
             className="audio-timeline-slider"
           />
           <p>{parseSeconds(this.state.duration)}</p>

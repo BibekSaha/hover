@@ -5,11 +5,14 @@
   margin-top: -100px;
   margin-left: -250px;
   -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
+  backdrop-filter: saturate(90%) blur(10px);
   font-size: 1.2rem;
   font-weight: 300;
   width: 500px;
   box-shadow: 2px 0px 15px 2px var(--shadow);
+  border-radius: 10px;
+  background: var(--gradient);
 }
 
 .SongDetailsCard {
@@ -21,6 +24,8 @@
   display: block;
   height: 150px;
   width: 150px;
+
+  border-top-left-radius: 10px;
 }
 
 .SongDetailsCard__details {
@@ -37,6 +42,8 @@
   align-items: center;
   padding: 1rem 1.5rem;
   background-color: var(--primary);
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
 .sound-wave-icon {
@@ -145,15 +152,21 @@
     font-size: 1rem;
     /* box-shadow: none; */
     margin: 0;
+    border-radius: 0;
   }
 
   .SongDetailsCard__img {
     height: 100px;
     width: 100px;
+    border-radius: 0;
   }
 
   .SongDetailsCard__details {
     padding: 0 1.5rem;
+  }
+
+  .audio {
+    border-radius: 0;
   }
 
   .sound-wave-icon {

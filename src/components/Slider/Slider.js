@@ -5,8 +5,9 @@ const Slider = props => {
   return (
     <div>
       <input 
-        className={`sliderRange ${props.className}`} 
-        min={props.min} max={props.max} 
+        className={`sliderRange ${props.className}`}
+        id={props.disabled && 'slider-disable-color'} 
+        min={props.min} max={props.max}
         value={props.value}
         onChange={e => props.onChange(e)}
         onMouseUp={e => props.onMouseUp(e)}
@@ -19,7 +20,7 @@ const Slider = props => {
 };
 
 Slider.defaultProps = {
-  min: 0, max: 100, value: 50, disabled: false
+  min: 0, max: 100, value: 50, disabled: false, onMouseUp: () => {}
 }
 
 export default Slider;

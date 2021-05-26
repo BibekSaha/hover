@@ -10,7 +10,9 @@ const DarkTheme = {
   '--shadow': 'rgba(255, 255, 255, 0.2)',
   '--brand-color-slider-alpha': 'rgba(253,219,39)',
   // '--track-shadow': '11px 11px 26px #0b0b0c,-11px -11px 26px #202024'
-  '--track-shadow': '5px 5px 15px #0b0b0c,-5px -5px 15px #202024' // this is the main
+  '--track-shadow': '5px 5px 15px #0b0b0c,-5px -5px 15px #202024', // this is the main,
+  '--slider-mute': '#27272a',
+  '--gradient': 'linear-gradient(133deg, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2))'
 };
 
 const LightTheme = {
@@ -21,7 +23,9 @@ const LightTheme = {
   '--primary': '#F1F5F8',
   '--secondary': '#3a3a3c',
   '--shadow': 'rgba(0, 0, 0, 0.2)',
-  '--track-shadow': '11px 11px 26px #c7c7c7, -11px -11px 26px #ffffff'
+  '--track-shadow': '11px 11px 26px #c7c7c7, -11px -11px 26px #ffffff',
+  '--slider-mute': '#c9c9c5',
+  '--gradient': 'linear-gradient(133deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2))'
 };
 
 const metaThemeColor = document.querySelector("meta[name=theme-color]");
