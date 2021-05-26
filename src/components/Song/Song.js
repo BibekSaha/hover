@@ -25,17 +25,24 @@ const Song = () => {
       document.title = `${cachedSong.fullTitle} | Hover`;
       setStore({ ...cachedSong, notFound: false });
       setLoading(false);
+      localStorage.setItem('last-played', songSlug);
     }
     return !!cachedSong;
   };
+
+  useEffect(() => {
+    document.title = 'Song | Hover';
+    // When the user reloads then start playing the song from the start
+    sessionStorage.clear();
+  }, []);
   
   useEffect(() => {
+    let slug = songSlug;
     const fetchData = async () => {
       setLoading(true);
       setStore(INITIAL_STATE);
       try {
         if (await searchForSongInLocalCache(songSlug)) return;
-        let slug = songSlug;
 
         if (!songSlug.match(/(\d+)(?!.*\d)$/)) {
           // e.g. /song/let-it-be
@@ -70,12 +77,6 @@ const Song = () => {
     };
     fetchData();
   }, [songSlug]);
-
-  useEffect(() => {
-    document.title = 'Song | Hover';
-    // When the user reloads then start playing the song from the start
-    sessionStorage.clear();
-  }, []);
 
   if (loading)
     return <Loader color="var(--secondary)" size="70" />;

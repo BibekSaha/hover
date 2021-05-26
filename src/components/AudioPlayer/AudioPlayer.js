@@ -10,12 +10,12 @@ import './AudioPlayer.css';
 import globalObject from '../../utils/global';
 
 class AudioPlayer extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.audioRef = React.createRef();
     this.cookie = cookieParser();
   }
-
+  
   state = {
     pause: '',
     showLoader: true,
@@ -38,6 +38,7 @@ class AudioPlayer extends React.Component {
       showLoader: false,
       pause: this.cookie.autoplay ? 'paused' : '',
     });
+    this.audioRef.current.seekTo(this.state.audioCurrentPlayTime, 'seconds');
   }
 
   onEnd = () => {
