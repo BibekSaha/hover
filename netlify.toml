@@ -1,5 +1,5 @@
 [build]
-  functions="backend"
+  functions="backend/lambda"
   command="npm run prebuild && npm run build"
   publish="build"
 

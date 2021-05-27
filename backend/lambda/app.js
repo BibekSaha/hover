@@ -1,8 +1,8 @@
 const express = require('express');
 const serverless = require('serverless-http');
 
-const searchRouter = require('./routes/searchRouter');
-const songRouter = require('./routes/songRouter');
+const searchRouter = require('../routes/searchRouter');
+const songRouter = require('../routes/songRouter');
 
 const app = express();
 
