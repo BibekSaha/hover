@@ -2,6 +2,7 @@ import React from 'react';
 import './Slider.css';
 
 const Slider = props => {
+  console.log(props.disabled);
   return (
     <div>
       <input 
@@ -9,9 +10,9 @@ const Slider = props => {
         id={props.disabled && 'slider-disable-color'} 
         min={props.min} max={props.max}
         value={props.value}
-        onChange={e => props.onChange(e)}
-        onMouseUp={e => props.onMouseUp(e)}
-        onTouchEnd={e => props.onMouseUp(e)}
+        onChange={e => props.onChange(e.target.value)}
+        onMouseUp={e => props.onMouseUp(e.target.value)}
+        onTouchEnd={e => props.onMouseUp(e.target.value)}
         disabled={props.disabled}
         type="range"
       />

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { set, get } from 'idb-keyval';
 import { useStore } from '../../store';
@@ -18,6 +18,7 @@ const Song = () => {
   // DO NOT INCLUDE setStore IN DEPENDENCY ARRAY
   const [,setStore] = useStore();
   const [loading, setLoading] = useState(true);
+  const cancel = useRef(null);
 
   const searchForSongInLocalCache = async (songSlug) => {
     let cachedSong = await get(songSlug, songStore);
@@ -44,10 +45,19 @@ const Song = () => {
       try {
         if (await searchForSongInLocalCache(songSlug)) return;
 
+        if (cancel.current)
+          cancel.current.abort();
+
+        cancel.current = new AbortController();
+        const { signal } = cancel.current;
+
         if (!songSlug.match(/(\d+)(?!.*\d)$/)) {
           // e.g. /song/let-it-be
           const songSearchString = slug.toLowerCase().replace(/-/g, ' ');
-          const resp = await fetch(`/api/v1/search?q=${songSearchString}`);
+          const resp = await fetch(
+            `/api/v1/search?q=${songSearchString}`, 
+            { signal }
+          );
           const { data: [tempSongData] } = await resp.json();
           if (!tempSongData) throw new Error();
           slug = constructSearchUri(tempSongData.title, tempSongData.id);
@@ -57,7 +67,10 @@ const Song = () => {
           if (await searchForSongInLocalCache(slug)) return;
         }
 
-        const resp = await fetch(`/api/v1/songs/${slug}`);
+        const resp = await fetch(
+          `/api/v1/songs/${slug}`, 
+          { signal }
+        );
         const { data } = await resp.json();
         // If the url slug is not in the right format
         slug = constructSearchUri(data.title, data.id);
@@ -71,6 +84,7 @@ const Song = () => {
         await set(slug, songData, songStore);
         localStorage.setItem('last-played', slug);
       } catch (err) {
+        if (err.name === 'AbortError') return; 
         setLoading(false);
         setStore({ ...INITIAL_STATE, notFound: true });
       }

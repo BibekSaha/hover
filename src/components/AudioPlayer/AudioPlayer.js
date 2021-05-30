@@ -45,6 +45,7 @@ class AudioPlayer extends React.Component {
   onEnd = () => {
     if (this.cookie.audioloop === 'true') return this.audioRef.current.seekTo(0, 'seconds');
     this.setState({ pause: '', audioCurrentPlayTime: 0});
+    sessionStorage.clear();
   };
 
   handlePlayPauseClick = () => {
@@ -57,15 +58,15 @@ class AudioPlayer extends React.Component {
     }
   };
 
-  handleSliderChange = e => {
+  handleSliderChange = value => {
     this.changing = true;
-    this.setState({ audioCurrentPlayTime: parseFloat(e.target.value) });
+    this.setState({ audioCurrentPlayTime: parseFloat(value) });
     sessionStorage.setItem('audioCurrentTime', this.state.audioCurrentPlayTime)
   }
 
-  handleSliderMouseUp = e => {
+  handleSliderMouseUp = value => {
     if (this.state.pause) 
-      this.audioRef.current.seekTo(parseInt(e.target.value), 'seconds');
+      this.audioRef.current.seekTo(parseInt(value), 'seconds');
     this.changing = false;
     // else 
       // this.setState({ audioCurrentPlayTime: parseInt(e.target.value) });
@@ -75,8 +76,19 @@ class AudioPlayer extends React.Component {
     // When the space bar is pressed play or pause the song
     globalObject.spacebarHandleSong = e => {
       e.preventDefault();
-      if (e.code === 'Space')
-        this.handlePlayPauseClick();
+      if (!this.state.showLoader) {
+        if (e.code === 'Space')
+          this.handlePlayPauseClick();
+        // else if (e.code === 'ArrowRight') {
+        //   let newAudioTime = this.state.audioCurrentPlayTime + 5;
+        //   if (newAudioTime > this.state.duration)
+        //     newAudioTime = this.state.duration;
+        //   this.handleSliderChange(newAudioTime);
+        //   this.handleSliderMouseUp(newAudioTime);
+        // } else if (e.code === 'ArrowLeft') {
+        //   console.log('Left arrow pressed');
+        // }
+      }
     }
     document.addEventListener('keydown', globalObject.spacebarHandleSong);
   }
