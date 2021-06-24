@@ -7,8 +7,8 @@ import { useStore } from '../../store';
 import Loader from '../Loader/Loader';
 import SongDisplay from '../SongDisplay/SongDisplay';
 import SongDetailsCard from '../SongDetailsCard/SongDetailsCard';
+// import SameArtist from '../SameArtist/SameArtist';
 import tempResponseCreator from '../../utils/tempResponseCreator';
-import constructSearchUri from '../../utils/constructSearchUri';
 import INITIAL_STATE from '../../store/__init__';
 import songStore from '../../utils/songStore';
 
@@ -45,6 +45,7 @@ const Song = () => {
       try {
         if (await searchForSongInLocalCache(songSlug)) return;
 
+        // Cancelling any previous pending request
         if (cancel.current)
           cancel.current.abort();
 
@@ -60,7 +61,7 @@ const Song = () => {
           );
           const { data: [tempSongData] } = await resp.json();
           if (!tempSongData) throw new Error();
-          slug = constructSearchUri(tempSongData.title, tempSongData.id);
+          slug = tempSongData.slug;
           document.title = `${tempSongData.title} | Hover`;
           window.history.replaceState(null, null, `/song/${slug}`);
           // check again if the song with the title and id exists in the cache
@@ -73,7 +74,7 @@ const Song = () => {
         );
         const { data } = await resp.json();
         // If the url slug is not in the right format
-        slug = constructSearchUri(data.title, data.id);
+        slug = data.slug;
         document.title = `${data.title} | Hover`;
         window.history.replaceState(null, null, `/song/${slug}`);
 
@@ -81,8 +82,10 @@ const Song = () => {
         setStore({ ...songData, notFound: false });
         setLoading(false);
 
-        await set(slug, songData, songStore);
-        localStorage.setItem('last-played', slug);
+        if (songData.lyrics.length) {
+          await set(slug, songData, songStore);
+          localStorage.setItem('last-played', slug);
+        }
       } catch (err) {
         if (err.name === 'AbortError') return; 
         setLoading(false);
@@ -98,6 +101,7 @@ const Song = () => {
     <React.Fragment>
       <SongDisplay />
       <SongDetailsCard />
+      {/* <SameArtist artistId={store.artistId} /> */}
     </React.Fragment>
   );
 };

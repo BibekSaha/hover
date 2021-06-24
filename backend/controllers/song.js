@@ -2,6 +2,7 @@ const fetchLyrics = require('../utils/fetchLyrics');
 const fetchCachedLyrics = require('../utils/fetchCachedLyrics');
 const geniusAxios = require('../geniusAxios');
 const select = require('../utils/select');
+const constructSearchURI = require('../utils/constructSearchUri');
 
 exports.getSong = async (req, res, next) => {
   try {
@@ -47,8 +48,14 @@ exports.getSong = async (req, res, next) => {
 
     responseData = {
       ...responseData,
-      lyrics
-    }
+      lyrics,
+      slug: constructSearchURI(responseData.title, responseData.id),
+      path: `${
+        req.baseUrl
+      }/${
+        constructSearchURI(responseData.title, responseData.id)
+      }` 
+    };
 
     res.status(200).json({
       status: 'success',

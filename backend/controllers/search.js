@@ -1,5 +1,6 @@
 const geniusAxios = require('../geniusAxios');
 const select = require('../utils/select');
+const constructSearchURI = require('../utils/constructSearchUri');
 
 exports.getSearchResults = async (req, res, next) => {
   try {
@@ -14,11 +15,22 @@ exports.getSearchResults = async (req, res, next) => {
 
     // Data sanitization and filtering
     let responseData = data.response.hits.filter(el => el.type === 'song');
-    responseData = responseData.map(el => ({ ...el.result }));
+    responseData = responseData.map(el => ({ 
+      ...el.result,
+      // Add the slug and the path to the final response
+      slug: constructSearchURI(el.result.title, el.result.id),
+      path: `${
+        req.baseUrl.replace('search', 'songs')
+      }/${
+        constructSearchURI(el.result.title, el.result.id)
+      }` 
+    }));
+
     responseData = responseData.map(el => select(
       el, 
       'song_art_image_thumbnail_url', 'id', 'primary_artist',
-      'title',
+      'title', 
+      'slug', 'path',
       // 'url', 'lyrics_state'
     ));
 
@@ -34,6 +46,7 @@ exports.getSearchResults = async (req, res, next) => {
       data: responseData
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 }

@@ -5,5 +5,6 @@ export default {
   audioPreviewURL: '',
   lyrics: '',
   notFound: null,
-  showSongDetailsCard: null
+  showSongDetailsCard: null,
+  artistId: null
 };

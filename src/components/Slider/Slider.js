@@ -2,12 +2,11 @@ import React from 'react';
 import './Slider.css';
 
 const Slider = props => {
-  console.log(props.disabled);
   return (
     <div>
       <input 
         className={`sliderRange ${props.className}`}
-        id={props.disabled && 'slider-disable-color'} 
+        id={props.disabled ? 'slider-disable-color' : ''} 
         min={props.min} max={props.max}
         value={props.value}
         onChange={e => props.onChange(e.target.value)}

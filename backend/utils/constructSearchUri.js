@@ -1,4 +1,4 @@
-export default (title, id) => {
+module.exports = (title, id) => {
   let uriBuilder = title
     .toLowerCase()
     .trim()
@@ -7,4 +7,4 @@ export default (title, id) => {
     .replace(/\?/g, '%3F')
     .concat(`-${id}`);
   return uriBuilder;
-}
+};

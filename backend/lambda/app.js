@@ -3,11 +3,13 @@ const serverless = require('serverless-http');
 
 const searchRouter = require('../routes/searchRouter');
 const songRouter = require('../routes/songRouter');
+const artistRouter = require('../routes/artistRouter');
 
 const app = express();
 
 app.use('/api/v1/search', searchRouter);
 app.use('/api/v1/songs', songRouter);
+app.use('/api/v1/artists', artistRouter);
 
 // 404 router handler
 app.all('*', (req, res, next) => {
