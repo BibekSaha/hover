@@ -8,8 +8,10 @@ module.exports = async url => {
       responseType: 'text'
     });
     const $ = cheerio.load(html);
+
+    const longClassName = 'Lyrics__Container-sc-1ynbvzw-8';
     
-    const className = html.indexOf('Lyrics__Container-sc-1ynbvzw-6') !== -1 ? 'Lyrics__Container-sc-1ynbvzw-6': 
+    const className = html.indexOf(longClassName) !== -1 ? longClassName: 
     'lyrics';
 
     // If the classname is the simple one
@@ -24,7 +26,7 @@ module.exports = async url => {
     // Push all the div that contains the classname into lyrics as html
     $(`div.${className}`)
       .each(
-        (_, e) => lyrics.push(cheerio.load(e).html())
+        (_, e) => lyrics.push($(e).html())
       );
 
     // Replace the <br> with \n of each element of lyrics
