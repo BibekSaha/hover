@@ -11,9 +11,9 @@ class VolumeSlider extends React.Component {
     this.setState({ volume: parseInt(cookieParser().volume) || 50 })
   }
 
-  onChange = e => {
-    this.setState({ volume: parseInt(e.target.value) })
-    cookieCreator('volume', e.target.value);
+  onChange = value => {
+    this.setState({ volume: parseInt(value) })
+    cookieCreator('volume', value);
   }
   
   render() {
