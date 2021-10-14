@@ -9,7 +9,7 @@ module.exports = async url => {
     });
     const $ = cheerio.load(html);
 
-    const longClassName = 'Lyrics__Container-sc-1ynbvzw-8';
+    const longClassName = 'Lyrics__Container-sc-1ynbvzw-10';
     
     const className = html.indexOf(longClassName) !== -1 ? longClassName: 
     'lyrics';
