@@ -9,10 +9,11 @@ module.exports = async url => {
     });
     const $ = cheerio.load(html);
 
-    const longClassName = 'Lyrics__Container-sc-1ynbvzw-10';
-    
+    const longClassName = process.env.LYRICS_CONTAINER;
     const className = html.indexOf(longClassName) !== -1 ? longClassName: 
     'lyrics';
+  
+    console.log(className);
 
     // If the classname is the simple one
     // then no need to do the extra shenanigans below
