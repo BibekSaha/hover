@@ -18,8 +18,8 @@
   "scripts": {
     "start": "react-scripts start",
     "prebuild": "cd backend && npm install --production && cd ..",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "dev": "netlify dev",
+    "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && GENERATE_SOURCEMAP=false react-scripts build",
+    "dev": "export SET NODE_OPTIONS=--openssl-legacy-provider && netlify dev",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

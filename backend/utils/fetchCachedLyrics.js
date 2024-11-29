@@ -6,7 +6,8 @@ module.exports = async url => {
   try {
     url = url.toLowerCase();
     console.log(url);
-    const cachedLyrics = await promisify(cache.get).call(cache, url);
+    // const cachedLyrics = await promisify(cache.get).call(cache, url);
+    const cachedLyrics = await cache.get(url);
     if (cachedLyrics !== null)
       return { lyrics: cachedLyrics };
     /**
