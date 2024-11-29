@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <div className="Header">
       <h1>HO<span className="make-it-yellow">V</span>ER</h1>
-      <p>IN HARMONY</p>
+      <p className="subheading">IN HARMONY</p>
       <nav className="Header-nav">
         <ul>
           <li><NavLink exact activeClassName="selected" to="/">Home</NavLink></li>
